@@ -53,8 +53,8 @@ function generateMockData() {
 async function analyzeBirthdayAPI(userData) {
     // API端点列表，按优先级排序
     const apiEndpoints = [
-//        'https://3.141.200.229:9999/analyze/birthday', // HTTPS优先
-        'http://3.141.200.229:9999/analyze/birthday'   // HTTP备用
+        'https://curve.sparkingtiming.com:9443/analyze/birthday', // HTTPS优先
+        'http://curve.sparkingtiming.com:9443/analyze/birthday'   // HTTP备用
     ];
     
     // 设置较短的超时时间，避免用户等待太久
@@ -87,13 +87,19 @@ async function analyzeBirthdayAPI(userData) {
             console.log(`使用真实API数据 (${endpoint})`);
             return data;
         } catch (error) {
-            console.warn(`API端点 ${endpoint} 不可用:`, error.message);
+            const errorMsg = window.currentLanguage === 'zh' 
+                ? `API端点 ${endpoint} 不可用: ${error.message}` 
+                : `API endpoint ${endpoint} unavailable: ${error.message}`;
+            console.warn(errorMsg);
             // 继续尝试下一个端点
         }
     }
     
     // 所有API端点都失败，使用模拟数据
-    console.log('🎲 所有API端点都不可用，使用模拟数据');
+    const fallbackMsg = window.currentLanguage === 'zh' 
+        ? '🎲 所有API端点都不可用，使用模拟数据' 
+        : '🎲 All API endpoints unavailable, using mock data';
+    console.log(fallbackMsg);
     return generateMockData();
 }
 
@@ -440,20 +446,25 @@ class BirthdayAnalyzer {
 
         // 1. 检查是否能成功解析
         if (isNaN(date.getTime())) {
-            return { valid: false, message: '请输入有效的日期和时间' };
+            const message = window.currentLanguage === 'zh' ? '请输入有效的日期和时间' : 'Please enter a valid date and time';
+            return { valid: false, message: message };
         }
 
         // 2. 检查年份范围
         const year = date.getFullYear();
         const currentYear = new Date().getFullYear();
         if (year < 1900 || year > currentYear) {
-            return { valid: false, message: `年份必须在1900到${currentYear}年之间` };
+            const message = window.currentLanguage === 'zh' 
+                ? `年份必须在1900到${currentYear}年之间` 
+                : `Year must be between 1900 and ${currentYear}`;
+            return { valid: false, message: message };
         }
 
         // 3. 检查是否是未来时间
         const now = new Date();
         if (date > now) {
-            return { valid: false, message: '不能选择未来时间' };
+            const message = window.currentLanguage === 'zh' ? '不能选择未来时间' : 'Cannot select future time';
+            return { valid: false, message: message };
         }
 
         // 4. 检查日期是否真的存在（例如避免2月30号）
@@ -461,7 +472,8 @@ class BirthdayAnalyzer {
         const day = date.getDate();
         const realMaxDay = new Date(year, month + 1, 0).getDate();
         if (day > realMaxDay) {
-            return { valid: false, message: '该日期不存在' };
+            const message = window.currentLanguage === 'zh' ? '该日期不存在' : 'This date does not exist';
+            return { valid: false, message: message };
         }
 
         return { valid: true };
@@ -848,13 +860,24 @@ class BirthdayAnalyzer {
         loveGradient.addColorStop(0, 'rgba(148, 68, 163, 0.3)');
         loveGradient.addColorStop(1, 'rgba(148, 68, 163, 0.05)');
         
+        // Get language-aware labels
+        const getLabels = () => {
+            if (window.currentLanguage === 'zh') {
+                return ['健康', '事业', '爱情'];
+            } else {
+                return ['Health', 'Career', 'Love'];
+            }
+        };
+        
+        const labels = getLabels();
+        
         this.chart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: [],
                 datasets: [
                     {
-                        label: '健康',
+                        label: labels[0],
                         data: [],
                         borderColor: '#5116b4',
                         backgroundColor: healthGradient,
@@ -863,7 +886,7 @@ class BirthdayAnalyzer {
                         borderWidth: 5
                     },
                     {
-                        label: '事业',
+                        label: labels[1],
                         data: [],
                         borderColor: '#2759ac',
                         backgroundColor: careerGradient,
@@ -872,7 +895,7 @@ class BirthdayAnalyzer {
                         borderWidth: 5
                     },
                     {
-                        label: '爱情',
+                        label: labels[2],
                         data: [],
                         borderColor: '#9444a3',
                         backgroundColor: loveGradient,
@@ -971,13 +994,15 @@ class BirthdayAnalyzer {
 
         // 验证必填字段
         if (!name) {
-            alert('请输入姓名');
+            const message = window.currentLanguage === 'zh' ? '请输入姓名' : 'Please enter your name';
+            alert(message);
             nameInput.focus();
             return;
         }
 
         if (!birthtime) {
-            alert('请选择出生时间');
+            const message = window.currentLanguage === 'zh' ? '请选择出生时间' : 'Please select birth date and time';
+            alert(message);
             birthtimeInput.focus();
             return;
         }
@@ -990,7 +1015,8 @@ class BirthdayAnalyzer {
         }
 
         if (!birthplace) {
-            alert('请输入出生地');
+            const message = window.currentLanguage === 'zh' ? '请输入出生地' : 'Please enter birth location';
+            alert(message);
             birthplaceInput.focus();
             return;
         }
@@ -998,7 +1024,9 @@ class BirthdayAnalyzer {
         try {
             // 显示加载状态
             submitBtn.disabled = true;
-            btnText.textContent = '推演中...';
+            // Use language-aware loading text
+            const loadingText = window.currentLanguage === 'zh' ? '推演中...' : 'Calculating...';
+            btnText.textContent = loadingText;
             console.log('🚀 开始分析生日数据...');
 
             // 从datetime-local格式中提取日期和时间
@@ -1021,11 +1049,13 @@ class BirthdayAnalyzer {
             console.log('分析完成，图表已更新');
         } catch (error) {
             console.error('分析失败:', error);
-            alert('分析失败，请稍后重试');
+            const errorMessage = window.currentLanguage === 'zh' ? '分析失败，请稍后重试' : 'Analysis failed, please try again later';
+            alert(errorMessage);
         } finally {
             // 恢复按钮状态
             submitBtn.disabled = false;
-            btnText.textContent = '推演';
+            // Use language-aware default text - let the language system handle this
+            // The language content system will update this automatically
         }
     }
     
@@ -1162,23 +1192,31 @@ class BirthdayAnalyzer {
             white-space: nowrap;
         `;
         
-        // 设置曲线颜色
-        const colors = {
+        // 设置曲线颜色 - language-aware
+        const colors = window.currentLanguage === 'zh' ? {
             '健康': '#5116b4',
             '事业': '#2759ac', 
             '爱情': '#9444a3'
+        } : {
+            'Health': '#5116b4',
+            'Career': '#2759ac', 
+            'Love': '#9444a3'
         };
+        
+        // Language-aware tooltip text
+        const timeLabel = window.currentLanguage === 'zh' ? '时间' : 'Time';
+        const peakLabel = window.currentLanguage === 'zh' ? '⭐ 能量最高点' : '⭐ Peak Energy Point';
         
         tooltip.innerHTML = `
             <div style="margin-bottom: 6px; font-weight: bold; color: #E2E8F0;">
-                时间: ${label}
+                ${timeLabel}: ${label}
             </div>
             <div style="display: flex; align-items: center; gap: 8px;">
                 <div style="width: 8px; height: 8px; border-radius: 50%; background: ${colors[curveName]};"></div>
                 <span style="font-weight: bold;">${curveName}</span>
             </div>
             <div style="margin-top: 4px; font-size: 12px; color: #A0AEC0;">
-                ⭐ 能量最高点
+                ${peakLabel}
             </div>
         `;
         

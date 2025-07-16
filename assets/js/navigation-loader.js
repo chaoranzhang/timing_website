@@ -108,27 +108,7 @@
                     href: language === 'zh' ? 'index-zh.html' : 'index.html',
                 },
                 menuItems: [
-                    {
-                        text: isEnglish ? 'Introduction' : '简介',
-                        href: this.getMenuItemHref('intro', language, pageType),
-                        id: 'intro'
-                    },
-                    {
-                        text: isEnglish ? 'Event Timing' : '事件择时',
-                        href: this.getMenuItemHref('work', language, pageType),
-                        id: 'work'
-                    },
-                    {
-                        text: isEnglish ? 'Energy Curve' : '能量曲线',
-                        href: this.getMenuItemHref('curve', language, pageType),
-                        id: 'curve',
-                        active: pageType === 'curve'
-                    },
-                    {
-                        text: isEnglish ? 'Contact' : '联系我们',
-                        href: this.getMenuItemHref('contact', language, pageType),
-                        id: 'contact'
-                    }
+                    // Menu items removed - keeping navigation structure only
                 ],
                 authButtons: this.getAuthButtons(language, pageType, isLoggedIn, userInfo),
                 isEnglishPage: isEnglish,

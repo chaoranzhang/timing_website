@@ -1,0 +1,457 @@
+/* Top Navigation Styles */
+.top-navigation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(27, 31, 35, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 10000;
+    padding: 1rem 0;
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    text-decoration: none;
+}
+
+.nav-logo img {
+    width: 2.5rem;
+    height: 2.5rem;
+    object-fit: contain;
+}
+
+.logo-text {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.05em;
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.nav-item {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+    position: relative;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.nav-item:hover {
+    color: #9f6cf7;
+}
+
+.nav-item.active {
+    color: #9f6cf7;
+}
+
+.nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #9f6cf7;
+}
+
+.nav-auth {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-right: 1rem; /* 确保右边有固定间距 */
+    flex-wrap: nowrap; /* 防止按钮换行 */
+    flex-shrink: 0; /* 防止按钮收缩 */
+}
+
+.login-btn {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    padding: 0.6rem 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    min-width: 80px; /* 固定最小宽度 */
+    text-align: center;
+    white-space: nowrap; /* 防止文字换行 */
+    flex-shrink: 0; /* 防止按钮收缩 */
+}
+
+.login-btn:hover {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.signup-btn {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    padding: 0.6rem 1.2rem;
+    background: linear-gradient(45deg, #9f6cf7, #6f8bf7);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(159, 108, 247, 0.3);
+    min-width: 80px; /* 固定最小宽度 */
+    text-align: center;
+    white-space: nowrap; /* 防止文字换行 */
+    flex-shrink: 0; /* 防止按钮收缩 */
+}
+
+.signup-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(159, 108, 247, 0.4);
+    background: linear-gradient(45deg, #b784ff, #84a0ff);
+}
+
+.lang-btn {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    padding: 0.6rem 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.05);
+    min-width: 60px; /* 设置最小宽度确保一致性 */
+    text-align: center;
+    white-space: nowrap; /* 防止文字换行 */
+    flex-shrink: 0; /* 防止按钮收缩 */
+}
+
+.lang-btn:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Adjust body padding to account for fixed nav */
+body {
+    padding-top: 5rem;
+}
+
+/* Center the entire homepage animation */
+#wrapper {
+    min-height: calc(100vh - 5rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Mobile adjustments */
+@media screen and (max-width: 600px) {
+    body {
+        padding-top: 4rem;
+    }
+
+    #wrapper {
+        min-height: calc(100vh - 4rem);
+    }
+}
+
+/* Responsive breakpoints - gradually hide navigation items */
+@media screen and (max-width: 1024px) {
+    .nav-container {
+        padding: 0 1.5rem;
+    }
+
+    .nav-menu {
+        gap: 2rem;
+    }
+}
+
+
+@media screen and (max-width: 920px) {
+    .nav-container {
+        padding: 0 1rem;
+    }
+
+    .nav-menu {
+        gap: 1.2rem;
+    }
+
+    .nav-item {
+        font-size: 0.8rem;
+    }
+
+    .nav-auth {
+        gap: 0.8rem;
+    }
+
+    .login-btn, .signup-btn {
+        font-size: 0.8rem;
+        padding: 0.5rem 1rem;
+        min-width: 70px;
+    }
+
+    .lang-btn {
+        font-size: 0.8rem;
+        padding: 0.5rem 1rem;
+        min-width: 50px;
+    }
+}
+
+@media screen and (max-width: 850px) {
+    /* Hide contact first */
+    .nav-item[data-nav-id="contact"] {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    /* Hide introduction next */
+    .nav-item[data-nav-id="intro"] {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    /* Keep event timing and energy curve visible until the end */
+    .nav-item:not([data-nav-id="curve"]):not([data-nav-id="timing"]) {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    /* Hide all navigation menu */
+    .nav-menu {
+        display: none;
+    }
+
+    .nav-container {
+        justify-content: space-between;
+    }
+
+    .nav-auth {
+        gap: 0.4rem;
+    }
+
+    .login-btn, .signup-btn {
+        font-size: 0.7rem;
+        padding: 0.4rem 0.7rem;
+        letter-spacing: 0.05rem;
+        min-width: 60px;
+    }
+
+    .lang-btn {
+        font-size: 0.7rem;
+        padding: 0.4rem 0.7rem;
+        letter-spacing: 0.05rem;
+        min-width: 45px;
+    }
+
+    .nav-logo .logo-text {
+        font-size: 0.9rem;
+    }
+
+    body {
+        padding-top: 4rem;
+    }
+
+    #wrapper {
+        min-height: calc(100vh - 4rem);
+    }
+
+    .top-navigation {
+        padding: 0.8rem 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .nav-container {
+        padding-right: 0;
+    }
+
+    .nav-auth {
+        gap: 0.25rem;
+        flex-wrap: nowrap;
+        overflow: hidden;
+    }
+
+    .login-btn, .signup-btn {
+        font-size: 0.65rem;
+        padding: 0.35rem 0.5rem;
+        min-width: 50px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .lang-btn {
+        font-size: 0.65rem;
+        padding: 0.35rem 0.5rem;
+        min-width: 40px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .nav-logo .logo-text {
+        font-size: 0.8rem;
+    }
+
+    .nav-logo img {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .nav-container {
+        padding: 0 0.5rem;
+    }
+
+    .nav-auth {
+        gap: 0.2rem;
+    }
+
+    .login-btn, .signup-btn {
+        font-size: 0.6rem;
+        padding: 0.3rem 0.4rem;
+        min-width: 45px;
+    }
+
+    .lang-btn {
+        font-size: 0.6rem;
+        padding: 0.3rem 0.4rem;
+        min-width: 35px;
+    }
+
+    .nav-logo .logo-text {
+        font-size: 0.75rem;
+    }
+
+    .nav-logo img {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .nav-auth {
+        gap: 0.15rem;
+    }
+
+    .login-btn, .signup-btn {
+        font-size: 0.55rem;
+        padding: 0.25rem 0.35rem;
+        min-width: 40px;
+    }
+
+    .lang-btn {
+        font-size: 0.55rem;
+        padding: 0.25rem 0.35rem;
+        min-width: 30px;
+    }
+
+    .nav-logo .logo-text {
+        font-size: 0.7rem;
+    }
+
+    .nav-logo img {
+        width: 25px;
+        height: 25px;
+    }
+}
+
+/* Large screen optimizations (31+ inch displays) */
+@media screen and (min-width: 1920px) {
+    .nav-container {
+        max-width: 1600px;
+        padding: 0 3rem;
+    }
+
+    .nav-menu {
+        gap: 3rem;
+    }
+
+    .nav-item {
+        font-size: 0.85rem;
+    }
+
+    .nav-auth {
+        gap: 1.2rem;
+        flex-direction: row; /* 确保在大屏幕上水平排列 */
+        flex-wrap: nowrap;
+    }
+
+    .login-btn, .signup-btn {
+        font-size: 0.8rem;
+        padding: 0.55rem 1.1rem;
+        min-width: 75px;
+        white-space: nowrap;
+    }
+
+    .lang-btn {
+        font-size: 0.75rem;
+        padding: 0.55rem 1.1rem;
+        min-width: 55px;
+        white-space: nowrap;
+    }
+}
+
+/* Extra large screens (32+ inch displays) */
+@media screen and (min-width: 2560px) {
+    .nav-container {
+        max-width: 2000px;
+        padding: 0 4rem;
+    }
+
+    .nav-menu {
+        gap: 4rem;
+    }
+
+    .nav-item {
+        font-size: 0.9rem;
+    }
+
+    .nav-auth {
+        gap: 1.5rem;
+    }
+
+    .login-btn, .signup-btn {
+        font-size: 0.82rem;
+        padding: 0.6rem 1.2rem;
+        min-width: 80px;
+    }
+
+    .lang-btn {
+        font-size: 0.78rem;
+        padding: 0.6rem 1.2rem;
+        min-width: 60px;
+    }
+}
+
+/* English page specific margin adjustment */
+.nav-auth.english-page {
+    margin-right: 0.6rem;
+} 

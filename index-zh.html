@@ -11,9 +11,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' data: https:;">
 		<meta http-equiv="X-Content-Type-Options" content="nosniff">
-		<link rel="icon" type="image/x-icon" href="favicon.ico">
-		<link rel="icon" type="image/png" href="favicon.png">
-		<link rel="apple-touch-icon" href="apple-touch-icon.png">
+		<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+		<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 		<!-- Prevent FOUC -->
 		<style>
 			.js-loading * {
@@ -26,6 +26,7 @@
 		</script>
 		<!-- Load CSS directly -->
 		<link rel="stylesheet" href="assets/css/main.css">
+		<link rel="stylesheet" href="assets/css/navigation.css">
 		<link rel="stylesheet" href="assets/css/noscript.css" media="none">
 		<script>
 			// Remove js-loading class when page is ready
@@ -429,12 +430,315 @@
 			#main article .close:before {
 				border-radius: 15px;
 			}
+
+			/* Event Timing Form Styles */
+			.event-form {
+				max-width: 600px;
+				margin: 2em auto;
+				padding: 2em;
+				background: rgba(255, 255, 255, 0.05);
+				border-radius: 15px;
+				border: 1px solid rgba(255, 255, 255, 0.1);
+			}
+
+			.form-group {
+				margin-bottom: 1.5em;
+			}
+
+			.form-group label {
+				display: block;
+				margin-bottom: 0.5em;
+				color: #ffffff;
+				font-size: 0.9em;
+				letter-spacing: 0.1em;
+			}
+
+			.form-input {
+				width: 100%;
+				padding: 0.8em 1em;
+				background: rgba(255, 255, 255, 0.1);
+				border: 1px solid rgba(255, 255, 255, 0.2);
+				border-radius: 8px;
+				color: #ffffff;
+				font-size: 0.9em;
+				transition: all 0.3s ease;
+				box-sizing: border-box;
+			}
+
+			.form-input:focus {
+				outline: none;
+				background: rgba(255, 255, 255, 0.15);
+				border-color: #9f6cf7;
+				box-shadow: 0 0 10px rgba(159, 108, 247, 0.3);
+			}
+
+			.form-input::placeholder {
+				color: rgba(255, 255, 255, 0.5);
+				font-style: italic;
+			}
+
+			/* Datetime input specific styling */
+			input[type="datetime-local"].form-input {
+				color: #ffffff;
+			}
+
+			input[type="datetime-local"].form-input::-webkit-datetime-edit {
+				color: #ffffff;
+			}
+
+			input[type="datetime-local"].form-input::-webkit-calendar-picker-indicator {
+				filter: invert(1);
+				cursor: pointer;
+			}
+
+			.submit-btn {
+				background-color: #8B5CF6;
+				color: white;
+				border: none;
+				padding: 1rem 2rem;
+				border-radius: 8px;
+				cursor: pointer;
+				font-size: 1rem;
+				font-weight: 600;
+				margin-top: 1rem;
+				width: 100%;
+				transition: all 0.3s ease;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 12px;
+			}
+
+			.submit-btn:hover {
+				background-color: #7C3AED;
+				transform: translateY(-2px);
+			}
+
+			.submit-btn:active {
+				transform: translateY(0);
+			}
+
+			.btn-text {
+				flex: none;
+			}
+
+			.btn-icon {
+				width: 28px;
+				height: 28px;
+				background-color: rgba(255, 255, 255, 0.2);
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				transition: all 0.3s ease;
+			}
+
+			.submit-btn:hover .btn-icon {
+				background-color: rgba(255, 255, 255, 0.3);
+				transform: translateX(2px);
+			}
+
+			.btn-icon svg {
+				width: 14px;
+				height: 14px;
+				color: white;
+			}
+
+			.result-container {
+				margin-top: 2em;
+				padding: 2em;
+				background: rgba(255, 255, 255, 0.05);
+				border-radius: 15px;
+				border: 1px solid rgba(255, 255, 255, 0.1);
+			}
+
+			.result-container h3 {
+				color: #9f6cf7;
+				margin-bottom: 1em;
+				text-align: center;
+			}
+
+			#result-content {
+				color: #ffffff;
+				line-height: 1.6;
+			}
+
+			/* Event Timing Chart Styles */
+			.timing-chart-section {
+				margin-top: 2em;
+				padding: 2em;
+				background: rgba(255, 255, 255, 0.05);
+				border-radius: 15px;
+				border: 1px solid rgba(255, 255, 255, 0.1);
+			}
+
+			/* Legend styling to match energy curve */
+			.legend {
+				display: flex;
+				gap: 20px;
+				margin-bottom: 20px;
+				flex-wrap: wrap;
+				justify-content: center;
+			}
+
+			.legend-item {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+
+			.legend-color {
+				width: 16px;
+				height: 16px;
+				border-radius: 3px;
+			}
+
+			.legend-color.blue { 
+				background-color: #5116b4; 
+			}
+			
+			.legend-color.purple { 
+				background-color: #2759ac; 
+			}
+			
+			.legend-color.pink { 
+				background-color: #9444a3; 
+			}
+
+			#timingChart {
+				width: 100% !important;
+				max-height: 400px !important;
+				background: rgba(255, 255, 255, 0.02) !important;
+				border-radius: 8px !important;
+			}
+
+			/* Mobile responsive for event form */
+			@media screen and (max-width: 736px) {
+				.event-form {
+					margin: 1em auto;
+					padding: 1.5em;
+				}
+				
+				.form-input {
+					padding: 0.7em 0.8em;
+					font-size: 0.85em;
+				}
+				
+				.submit-btn {
+					padding: 0.8em 1.5em;
+					font-size: 0.9em;
+				}
+			}
+
+			/* Registration Modal Styles */
+			.modal-overlay {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: rgba(0, 0, 0, 0.8);
+				backdrop-filter: blur(10px);
+				z-index: 10000;
+				display: none;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.modal-overlay.active {
+				display: flex;
+			}
+
+			.modal-content {
+				background: rgba(27, 31, 35, 0.95);
+				border: 1px solid rgba(255, 255, 255, 0.2);
+				border-radius: 20px;
+				padding: 2.5em;
+				max-width: 500px;
+				width: 90%;
+				position: relative;
+				box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+			}
+
+			.modal-close {
+				position: absolute;
+				top: 1em;
+				right: 1em;
+				background: none;
+				border: none;
+				color: rgba(255, 255, 255, 0.6);
+				font-size: 1.5em;
+				cursor: pointer;
+				transition: color 0.3s ease;
+			}
+
+			.modal-close:hover {
+				color: #ffffff;
+			}
+
+			.modal-title {
+				color: #ffffff;
+				font-size: 1.1em;
+				margin-bottom: 1.5em;
+				text-align: center;
+				line-height: 1.4;
+			}
+
+			.modal-buttons {
+				display: flex;
+				gap: 1rem;
+				flex-direction: column;
+			}
+
+			.modal-login-btn, .modal-register-btn {
+				display: block;
+				width: 100%;
+				color: #ffffff;
+				border: none;
+				padding: 1em 2em;
+				border-radius: 12px;
+				font-size: 1.1em;
+				letter-spacing: 0.1em;
+				cursor: pointer;
+				transition: all 0.3s ease;
+				text-decoration: none;
+				text-align: center;
+			}
+
+			.modal-login-btn {
+				background: linear-gradient(45deg, #6f8bf7, #9f6cf7);
+				box-shadow: 0 4px 15px rgba(111, 139, 247, 0.3);
+			}
+
+			.modal-register-btn {
+				background: linear-gradient(45deg, #9f6cf7, #6f8bf7);
+				box-shadow: 0 4px 15px rgba(159, 108, 247, 0.3);
+			}
+
+			.modal-login-btn:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 6px 20px rgba(111, 139, 247, 0.4);
+				background: linear-gradient(45deg, #84a0ff, #b784ff);
+			}
+
+			.modal-register-btn:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 6px 20px rgba(159, 108, 247, 0.4);
+				background: linear-gradient(45deg, #b784ff, #84a0ff);
+			}
+
+			@media screen and (min-width: 480px) {
+				.modal-buttons {
+					flex-direction: row;
+				}
+			}
+
 		</style>
 	</head>
 	<body class="is-preload">
-		<div class="lang-switch">
-			<a href="index.html">English Version</a>
-		</div>
+		<!-- Navigation will be loaded dynamically -->
+
+
 
 		<!-- Wrapper -->
 			<div id="wrapper">
@@ -456,8 +760,8 @@
 						<nav>
 							<ul>
 								<li><a href="#intro">简介</a></li>
-								<li><a href="#work">功能</a></li>
-								<li><a href="http://curve.sparkingtiming.com">开启旅程</a></li>
+								<li><a href="#work">事件择时</a></li>
+								<li><a href="curve/index_curve.html?lang=zh">能量曲线</a></li>
 								<li><a href="#contact">联系我们</a></li>
 								<!--<li><a href="#elements">Elements</a></li>-->
 							</ul>
@@ -476,13 +780,17 @@
 								<p>当撞上「能量暗礁」，再努力也只是原地打转。</p>
 								<p>让Timing成为你的「人生作弊系统」</p>
 								<p>用玄学能量校准行动频率，让每一步都踩在「顺势点」上，达到事半功倍。</p>
-							</article>
 
-						<!-- Work -->
-							<article id="work">
-								<h2 class="major zh-title">能量推演 × 效率管理 = 顺势而为</h2>
+								<!-- 将原功能部分的内容移到这里 -->
+								<h3 style="margin-top: 2em; color: #9f6cf7; font-size: 1.2em;">能量推演 × 效率管理 = 顺势而为</h3>
 								<p class="subtitle">你的专属AI 为你拆解目标，进行日程能量校准，让努力自带「趋势加成」</p>
-								<span class="image main"><img src="images/pic02.jpg" alt="行动能量评分曲线" /></span>
+								<span class="image main">
+									<video autoplay muted loop playsinline preload="auto" style="width: 100%; height: auto; border-radius: 8px;" onloadstart="console.log('Video loading started')" oncanplay="console.log('Video can play')" onerror="console.log('Video error:', this.error); this.style.display='none'; this.nextElementSibling.style.display='block';">
+										<source src="images/video_zh.mp4" type="video/mp4">
+										您的浏览器不支持视频播放。
+									</video>
+									<img src="images/pic02.jpg" alt="行动能量评分曲线" style="display: none;" />
+								</span>
 								
 								<div class="features-grid">
 									<div class="feature-card">
@@ -508,6 +816,67 @@
 										<h3>社区共赢</h3>
 										<p>与共振的灵魂同行<br />与丢失的自己和解</p>
 									</div>
+								</div>
+							</article>
+
+						<!-- Work -->
+							<article id="work">
+								<h2 class="major zh-title">事件择时</h2>
+								<p class="subtitle">选择最佳时机，让每个重要决定都在最佳能量点执行</p>
+								
+								<form id="event-timing-form" class="event-form">
+									<div class="form-group">
+										<label for="event-name">事件名称</label>
+										<input type="text" id="event-name" name="event-name" class="form-input" placeholder="例如搬家，考试等" required>
+									</div>
+									
+									<div class="form-group">
+										<label for="start-time">起始时间范围</label>
+										<input type="datetime-local" id="start-time" name="start-time" class="form-input" required>
+									</div>
+									
+									<div class="form-group">
+										<label for="end-time">结束时间范围</label>
+										<input type="datetime-local" id="end-time" name="end-time" class="form-input" required>
+									</div>
+									
+									<div class="form-group">
+										<label for="event-location">地点</label>
+										<input type="text" id="event-location" name="event-location" class="form-input" placeholder="请输入事件发生地点" required>
+									</div>
+									
+									<button type="submit" class="submit-btn">
+										<span class="btn-text">分析最佳时机</span>
+										<span class="btn-icon">
+											<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+												<path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+											</svg>
+										</span>
+									</button>
+								</form>
+								
+								<!-- Event Timing Chart Section -->
+								<section class="timing-chart-section" style="display: none;">
+									<div class="legend">
+										<div class="legend-item">
+											<span class="legend-color blue"></span>
+											<span>最佳时机</span>
+										</div>
+										<div class="legend-item">
+											<span class="legend-color purple"></span>
+											<span>次佳时机</span>
+										</div>
+										<div class="legend-item">
+											<span class="legend-color pink"></span>
+											<span>避免时段</span>
+										</div>
+									</div>
+									<canvas id="timingChart"></canvas>
+								</section>
+								
+								<div id="timing-result" class="result-container" style="display: none;">
+									<h3>分析结果</h3>
+									<div id="result-content"></div>
 								</div>
 							</article>
 
@@ -567,7 +936,24 @@
 		<!-- BG -->
 			<div id="bg"></div>
 
+		<!-- Registration Modal -->
+		<div id="registration-modal" class="modal-overlay">
+			<div class="modal-content">
+				<button class="modal-close" onclick="closeRegistrationModal()">&times;</button>
+				<div class="modal-title">
+					事件择时需要生日信息，<br>
+					请登录或注册账户即可解锁更多功能与使用权限！
+				</div>
+				<div class="modal-buttons">
+					<a href="login.html?lang=zh" class="modal-login-btn">登录</a>
+					<a href="register.html?lang=zh" class="modal-register-btn">注册</a>
+				</div>
+			</div>
+		</div>
+
 		<!-- Scripts -->
+			<!-- Chart.js for timing chart -->
+			<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 			<script src="assets/js/jquery.min.js"></script>
 			<script>
 				// Fallback to CDN if local file fails to load
@@ -581,6 +967,236 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			<!-- Load navigation system -->
+			<script src="assets/js/navigation-loader.js"></script>
+			<script src="assets/js/navigation.js"></script>
 
+			<script>
+				// Registration Modal Functions
+				function showRegistrationModal() {
+					const modal = document.getElementById('registration-modal');
+					modal.classList.add('active');
+				}
+
+				function closeRegistrationModal() {
+					const modal = document.getElementById('registration-modal');
+					modal.classList.remove('active');
+				}
+
+				// Check if user is registered and logged in
+				function isUserRegistered() {
+					const userRegistered = localStorage.getItem('userRegistered');
+					const userInfo = localStorage.getItem('userInfo');
+					return userRegistered === 'true' && userInfo;
+				}
+
+				// Event Timing Form Functionality
+				document.addEventListener('DOMContentLoaded', function() {
+					const eventForm = document.getElementById('event-timing-form');
+					const resultContainer = document.getElementById('timing-result');
+					const resultContent = document.getElementById('result-content');
+
+					// Close modal when clicking outside
+					document.getElementById('registration-modal').addEventListener('click', function(e) {
+						if (e.target === this) {
+							closeRegistrationModal();
+						}
+					});
+
+					// Auto-fill user data if available
+					try {
+						const userInfo = localStorage.getItem('userInfo');
+						if (userInfo) {
+							const user = JSON.parse(userInfo);
+							
+							// Pre-fill event location with user's birth location if available
+							if (user.birthLocation) {
+								document.getElementById('event-location').value = user.birthLocation;
+							}
+						}
+					} catch (error) {
+						console.error('Error auto-filling user data:', error);
+					}
+
+					if (eventForm) {
+						eventForm.addEventListener('submit', function(e) {
+							e.preventDefault();
+							
+							// Check if user is registered first
+							if (!isUserRegistered()) {
+								showRegistrationModal();
+								return;
+							}
+
+							// Get form data
+							const formData = new FormData(eventForm);
+							const eventData = {
+								eventName: formData.get('event-name'),
+								startTime: formData.get('start-time'),
+								endTime: formData.get('end-time'),
+								location: formData.get('event-location')
+							};
+
+							// Validate form
+							if (!eventData.eventName || !eventData.startTime || !eventData.endTime || !eventData.location) {
+								alert('请填写所有必填字段');
+								return;
+							}
+
+							// Validate time range
+							const startDate = new Date(eventData.startTime);
+							const endDate = new Date(eventData.endTime);
+							if (startDate >= endDate) {
+								alert('结束时间必须晚于起始时间');
+								return;
+							}
+
+							// Show loading state
+							const submitBtn = eventForm.querySelector('.submit-btn');
+							const originalText = submitBtn.textContent;
+							submitBtn.textContent = '分析中...';
+							submitBtn.disabled = true;
+
+							// Simulate API call (replace with actual API endpoint)
+							setTimeout(() => {
+								// Mock response - replace with actual API call
+								const mockResult = generateMockResult(eventData);
+								displayResult(mockResult);
+								
+								// Reset button
+								submitBtn.textContent = originalText;
+								submitBtn.disabled = false;
+							}, 2000);
+						});
+					}
+
+					function generateMockResult(eventData) {
+						// This is a mock function - replace with actual API call
+						const startDate = new Date(eventData.startTime);
+						const endDate = new Date(eventData.endTime);
+						const optimalDate = new Date(startDate.getTime() + (endDate.getTime() - startDate.getTime()) * 0.3);
+						
+						return {
+							optimalTime: optimalDate.toLocaleString('zh-CN'),
+							energyScore: Math.floor(Math.random() * 30) + 70,
+							recommendation: `根据您的${eventData.eventName}需求分析，建议在${optimalDate.toLocaleDateString('zh-CN')}进行此事件。`,
+							tips: [
+								'此时段能量状态最佳，有利于事件顺利进行',
+								'建议提前做好相关准备工作',
+								'保持积极心态，顺势而为'
+							]
+						};
+					}
+
+					function displayResult(result) {
+						// Show chart first
+						const chartSection = document.querySelector('.timing-chart-section');
+						chartSection.style.display = 'block';
+						
+						// Create timing chart
+						createTimingChart();
+						
+						resultContent.innerHTML = `
+							<div style="text-align: center; margin-bottom: 1.5em;">
+								<h4 style="color: #9f6cf7; margin-bottom: 0.5em;">最佳时机</h4>
+								<p style="font-size: 1.1em; font-weight: bold;">${result.optimalTime}</p>
+								<p style="color: #6f8bf7;">能量评分: ${result.energyScore}/100</p>
+							</div>
+							<div style="margin-bottom: 1.5em;">
+								<h4 style="color: #9f6cf7; margin-bottom: 0.5em;">分析建议</h4>
+								<p>${result.recommendation}</p>
+							</div>
+							<div>
+								<h4 style="color: #9f6cf7; margin-bottom: 0.5em;">温馨提示</h4>
+								<ul style="list-style: none; padding: 0;">
+									${result.tips.map(tip => `<li style="margin-bottom: 0.5em; padding-left: 1em; position: relative;">
+										<span style="position: absolute; left: 0; color: #9f6cf7;">•</span>
+										${tip}
+									</li>`).join('')}
+								</ul>
+							</div>
+						`;
+						
+						resultContainer.style.display = 'block';
+						chartSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+					}
+
+					function createTimingChart() {
+						const ctx = document.getElementById('timingChart').getContext('2d');
+						
+						// Generate sample data for timing analysis
+						const labels = [];
+						const optimalData = [];
+						const goodData = [];
+						const avoidData = [];
+						
+						// Generate 24 hours of data
+						for (let i = 0; i < 24; i++) {
+							labels.push(`${i}:00`);
+							optimalData.push(Math.random() * 40 + 60); // 60-100
+							goodData.push(Math.random() * 30 + 40); // 40-70
+							avoidData.push(Math.random() * 20 + 20); // 20-40
+						}
+						
+						new Chart(ctx, {
+							type: 'line',
+							data: {
+								labels: labels,
+								datasets: [{
+									label: '最佳时机',
+									data: optimalData,
+									borderColor: '#5116b4',
+									backgroundColor: 'rgba(81, 22, 180, 0.1)',
+									borderWidth: 2,
+									fill: true
+								}, {
+									label: '次佳时机',
+									data: goodData,
+									borderColor: '#2759ac',
+									backgroundColor: 'rgba(39, 89, 172, 0.1)',
+									borderWidth: 2,
+									fill: true
+								}, {
+									label: '避免时段',
+									data: avoidData,
+									borderColor: '#9444a3',
+									backgroundColor: 'rgba(148, 68, 163, 0.1)',
+									borderWidth: 2,
+									fill: true
+								}]
+							},
+							options: {
+								responsive: true,
+								maintainAspectRatio: false,
+								scales: {
+									y: {
+										beginAtZero: true,
+										max: 100,
+										grid: {
+											color: 'rgba(255, 255, 255, 0.1)'
+										},
+										ticks: {
+											color: '#ffffff'
+										}
+									},
+									x: {
+										grid: {
+											color: 'rgba(255, 255, 255, 0.1)'
+										},
+										ticks: {
+											color: '#ffffff'
+										}
+									}
+								},
+								plugins: {
+									legend: {
+										display: false // Hide default legend as we have custom one
+									}
+								}
+							}
+						});
+					}
+				});
+			</script>
 	</body>
 </html> 

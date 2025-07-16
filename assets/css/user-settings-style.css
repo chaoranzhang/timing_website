@@ -1,0 +1,194 @@
+/* User Settings page specific styles */
+.settings-container {
+    position: relative;
+    z-index: 3;
+    min-height: calc(100vh - 5rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 2rem 2rem;
+}
+
+.settings-content {
+    background-color: rgba(27, 31, 34, 0.85);
+    border-radius: 12px;
+    padding: 3rem 2.5rem 2rem 2.5rem;
+    width: 28rem;
+    max-width: 100%;
+    position: relative;
+}
+
+.settings-title {
+    text-align: center;
+    color: #ffffff;
+    font-size: 1.8rem;
+    font-weight: 300;
+    margin-bottom: 1rem;
+    letter-spacing: 0.1em;
+}
+
+.settings-subtitle {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #ffffff;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+}
+
+.form-input {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    font-size: 1rem;
+    line-height: 1.5;
+    min-height: 3.5rem;
+    height: 3.5rem;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #9f6cf7;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 3px rgba(159, 108, 247, 0.1);
+}
+
+.form-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* DateTime input styling */
+.form-input[type="datetime-local"] {
+    color-scheme: dark;
+}
+
+/* Select input styling */
+select.form-input {
+    padding: 1rem 3rem 1rem 1.5rem;
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.2rem;
+}
+
+select.form-input option {
+    background: #2a1810;
+    color: #ffffff;
+}
+
+/* Password section separator */
+.password-section {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1.5rem;
+    margin-top: 2rem;
+}
+
+.password-section-title {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-align: center;
+    letter-spacing: 0.05em;
+}
+
+/* Button styling */
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.form-btn {
+    flex: 1;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-cancel-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.form-cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    color: #ffffff;
+}
+
+.form-save-btn {
+    background: linear-gradient(45deg, #9f6cf7, #6f8bf7);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(159, 108, 247, 0.3);
+}
+
+.form-save-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(159, 108, 247, 0.4);
+    background: linear-gradient(45deg, #b784ff, #84a0ff);
+}
+
+/* Back button */
+button.back-btn {
+    all: unset; 
+    position: absolute;
+    top: 1rem;
+    left: 1.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+    display: none;
+  }
+
+
+/* Mobile responsive */
+@media screen and (max-width: 768px) {
+    .settings-container {
+        padding: 0 1rem 1rem;
+    }
+
+    .settings-content {
+        padding: 2.5rem 2rem 1.5rem 2rem;
+        width: 100%;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .back-btn {
+        top: 0.5rem;
+        left: 1rem;
+        width: 35px;
+        height: 35px;
+    }
+}

@@ -1,19 +1,19 @@
 <!DOCTYPE HTML>
-<!--
-	Dimension by HTML5 UP
-	https://html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (https://html5up.net/license)
--->
 <html>
 	<head>
 		<title>Timing - Life Hacking System</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' data: https:;">
+		<meta http-equiv="Content-Security-Policy" content="
+			default-src 'self' 'unsafe-inline' https:; 
+			img-src 'self' data: https:; 
+			style-src 'self' 'unsafe-inline' https:; 
+			font-src 'self' data: https:;
+		">
 		<meta http-equiv="X-Content-Type-Options" content="nosniff">
-		<link rel="icon" type="image/x-icon" href="favicon.ico">
-		<link rel="icon" type="image/png" href="favicon.png">
-		<link rel="apple-touch-icon" href="apple-touch-icon.png">
+		<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+		<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 		<!-- Prevent FOUC -->
 		<style>
 			.js-loading * {
@@ -26,465 +26,19 @@
 		</script>
 		<!-- Load CSS directly -->
 		<link rel="stylesheet" href="assets/css/main.css">
+		<link rel="stylesheet" href="assets/css/navigation.css">
 		<link rel="stylesheet" href="assets/css/noscript.css" media="none">
+		<link rel="stylesheet" href="assets/css/index-style.css">
 		<script>
 			// Remove js-loading class when page is ready
 			window.addEventListener('DOMContentLoaded', (event) => {
-				document.documentElement.className = document.documentElement.className.replace('js-loading','');
+				document.documentElement.className = document.documentElement.className.replace('js-loading', '');
 			});
 		</script>
-		<style>
-			.lang-switch {
-				position: fixed;
-				top: 20px;
-				right: 20px;
-				z-index: 1000;
-			}
-			.lang-switch a {
-				display: inline-block;
-				padding: 8px 15px;
-				background: rgba(255, 255, 255, 0.1);
-				border: 1px solid rgba(255, 255, 255, 0.3);
-				border-radius: 4px;
-				color: #ffffff;
-				text-decoration: none;
-				font-size: 0.8em;
-				letter-spacing: 2px;
-				transition: all 0.3s ease;
-			}
-			.lang-switch a:hover {
-				background: rgba(255, 255, 255, 0.2);
-				border-color: rgba(255, 255, 255, 0.5);
-			}
-			.logo {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-			}
-			.logo img {
-				width: 7em;
-				height: 7em;
-				object-fit: contain;
-				padding: 1em;
-			}
-			.subtitle {
-				font-size: 0.9em;
-				margin-top: 1em;
-				color: rgba(255, 255, 255, 0.75);
-				letter-spacing: 0.1em;
-				line-height: 1.5;
-			}
-			#work h2.major {
-				font-size: 1.3em;
-				line-height: 1.4;
-				margin-bottom: 1.5em;
-				white-space: normal; /* Allow text to wrap */
-			}
-			.features-grid {
-				display: grid;
-				grid-template-columns: repeat(2, 1fr);
-				gap: 2em;
-				margin: 2em 0;
-				max-width: 100%;
-			}
-			
-			.feature-card {
-				background: rgba(255, 255, 255, 0.05);
-				border-radius: 15px;
-				padding: 1.2em;
-				transition: all 0.3s ease;
-				border: 1px solid rgba(255, 255, 255, 0.1);
-				text-align: center;
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				justify-content: center;
-				min-height: 200px;
-				overflow: hidden;
-			}
-			
-			.feature-card:hover {
-				background: rgba(255, 255, 255, 0.1);
-				transform: translateY(-5px);
-			}
-			
-			.feature-card h3 {
-				color: #ffffff;
-				font-size: 1.2em;
-				margin-bottom: 0.8em;
-				letter-spacing: 0.05em;
-			}
-			
-			.feature-card p {
-				color: rgba(255, 255, 255, 0.7);
-				font-size: 0.9em;
-				line-height: 1.6;
-				margin: 0;
-			}
-
-			.feature-card .icon {
-				font-size: 2em;
-				margin-bottom: 0.5em;
-				background: linear-gradient(45deg, #9f6cf7, #6f8bf7);
-				-webkit-background-clip: text;
-				-webkit-text-fill-color: transparent;
-				transition: all 0.3s ease;
-				display: inline-block;
-				width: auto;
-				height: auto;
-				min-height: 40px;
-			}
-			
-			.feature-card:hover .icon {
-				background: linear-gradient(45deg, #b784ff, #84a0ff);
-				-webkit-background-clip: text;
-				-webkit-text-fill-color: transparent;
-			}
-			
-			.cta-section {
-				text-align: center;
-				padding: 2em 0;
-			}
-			
-			.cta-title {
-				font-size: 2em;
-				margin-bottom: 0.5em;
-				line-height: 1.4;
-			}
-			
-			.cta-subtitle {
-				font-size: 1.2em;
-				color: rgba(255, 255, 255, 0.8);
-				margin-bottom: 2em;
-				line-height: 1.6;
-			}
-			
-			.cta-button {
-				display: inline-block;
-				background: linear-gradient(45deg, #9f6cf7, #6f8bf7);
-				color: #ffffff;
-				padding: 1em 2em;
-				border-radius: 12px;
-				font-size: 1.1em;
-				letter-spacing: 0.1em;
-				transition: all 0.3s ease;
-				border: none;
-				cursor: pointer;
-				box-shadow: 0 4px 15px rgba(159, 108, 247, 0.3);
-			}
-			
-			.cta-button:hover {
-				transform: translateY(-2px);
-				box-shadow: 0 6px 20px rgba(159, 108, 247, 0.4);
-				background: linear-gradient(45deg, #b784ff, #84a0ff);
-			}
-			
-			.highlight {
-				color: #9f6cf7;
-				font-weight: bold;
-			}
-
-			@keyframes pulse {
-				0% {
-					transform: scale(1);
-					box-shadow: 0 4px 15px rgba(159, 108, 247, 0.3);
-				}
-				50% {
-					transform: scale(1.05);
-					box-shadow: 0 8px 25px rgba(159, 108, 247, 0.5);
-				}
-				100% {
-					transform: scale(1);
-					box-shadow: 0 4px 15px rgba(159, 108, 247, 0.3);
-				}
-			}
-
-			.header-cta .cta-button {
-				background: linear-gradient(45deg, #9f6cf7, #6f8bf7);
-				color: #ffffff;
-				padding: 0.8em 2em;
-				border-radius: 12px;
-				font-size: 1.2em;
-				letter-spacing: 0.15em;
-				transition: all 0.3s ease;
-				border: none;
-				cursor: pointer;
-				box-shadow: 0 4px 15px rgba(159, 108, 247, 0.3);
-				animation: pulse 2s infinite;
-				text-transform: uppercase;
-			}
-
-			.header-cta .cta-button:hover {
-				transform: translateY(-2px) scale(1.05);
-				box-shadow: 0 8px 25px rgba(159, 108, 247, 0.5);
-				background: linear-gradient(45deg, #b784ff, #84a0ff);
-			}
-
-			/* Mobile Responsive Styles */
-			@media screen and (max-width: 736px) {
-				.features-grid {
-					grid-template-columns: 1fr;
-					gap: 1.5em;
-					margin: 1.5em 0;
-					padding: 0 1em;
-				}
-
-				.feature-card {
-					padding: 1.5em;
-					margin-bottom: 0;
-					min-height: 180px;
-					border-radius: 12px;
-				}
-
-				.feature-card .icon {
-					font-size: 1.8em;
-					margin-bottom: 0.8em;
-					min-height: 35px;
-				}
-
-				.feature-card h3 {
-					font-size: 1.1em;
-					margin-bottom: 0.8em;
-					padding: 0 0.5em;
-				}
-
-				.feature-card p {
-					font-size: 0.9em;
-					line-height: 1.5;
-					padding: 0 0.5em;
-				}
-
-				#work {
-					padding: 2em 1em;
-				}
-
-				#work h2.major {
-					font-size: 1.1em;
-					padding: 0 0.5em;
-				}
-
-				.subtitle {
-					font-size: 0.8em;
-					margin-bottom: 1em;
-				}
-
-				#main article {
-					padding-top: 5em;
-					border-radius: 15px;
-				}
-				
-				#main article .close {
-					top: 2.5em;
-				}
-				
-				#work h2.major {
-					margin-top: 1.5em;
-				}
-
-				/* Ensure the content stays within view */
-				#main article {
-					margin-top: -0.5em;
-				}
-
-				#intro h2.major {
-					font-size: 1.2em;
-				}
-			}
-
-			@media screen and (max-width: 480px) {
-				.feature-card {
-					padding: 1.2em;
-					min-height: 160px;
-				}
-
-				.feature-card .icon {
-					font-size: 1.6em;
-					margin-bottom: 0.6em;
-					min-height: 30px;
-				}
-
-				.feature-card h3 {
-					font-size: 1em;
-					margin-bottom: 0.6em;
-				}
-
-				.feature-card p {
-					font-size: 0.85em;
-					line-height: 1.4;
-				}
-			}
-
-			/* Ensure background image covers properly */
-			@media screen and (max-width: 736px) {
-				#work .image.main {
-					margin: 1em 0;
-				}
-				
-				#work .image.main img {
-					width: 100%;
-					height: auto;
-					object-fit: cover;
-				}
-			}
-
-			.footnote {
-				font-size: 10px;
-				color: rgba(255, 255, 255, 0.3);
-				margin-top: 4em;
-				padding-top: 0.5em;
-				text-align: center;
-				letter-spacing: 0.5px;
-				border-top: solid 1px rgba(255, 255, 255, 0.05);
-			}
-
-			.footnote a {
-				color: rgba(255, 255, 255, 0.3);
-				text-decoration: none;
-				border-bottom: dotted 1px rgba(255, 255, 255, 0.1);
-			}
-
-			.footnote a:hover {
-				color: rgba(255, 255, 255, 0.4);
-				border-bottom-color: rgba(255, 255, 255, 0.2);
-			}
-
-			@media screen and (max-width: 736px) {
-				.footnote {
-					font-size: 8px;
-					margin-top: 3em;
-				}
-			}
-
-			/* English title specific styles */
-			.en-title {
-				font-size: 0.8em;
-				line-height: 1.4;
-				margin-bottom: 1.5em;
-			}
-
-			.en-title .first-line {
-				white-space: nowrap;
-				display: block;
-				margin-bottom: 0.3em;
-				letter-spacing: -0.02em;
-				word-spacing: -0.05em;
-			}
-
-			.en-title .second-line {
-				display: block;
-			}
-
-			@media screen and (max-width: 736px) {
-				.en-title {
-					font-size: 0.7em;
-					padding: 0 0.5em;
-				}
-				
-				.en-title .first-line {
-					white-space: normal;
-					margin-bottom: 0.2em;
-					letter-spacing: -0.01em;
-					word-spacing: -0.03em;
-				}
-			}
-
-			/* Introduction title specific styles */
-			#intro h2.major {
-				font-size: 1.3em;
-				line-height: 1.4;
-				margin-bottom: 1.5em;
-				letter-spacing: 0.1em;
-			}
-
-			#intro p {
-				font-size: 0.95em;
-				line-height: 1.8;
-				margin-bottom: 1.2em;
-			}
-
-			@media screen and (max-width: 736px) {
-				#intro h2.major {
-					font-size: 1.1em;
-					margin-bottom: 1.2em;
-					padding: 0 0.5em;
-				}
-
-				#intro p {
-					font-size: 0.9em;
-					line-height: 1.6;
-					margin-bottom: 1em;
-				}
-			}
-
-			@media screen and (max-width: 480px) {
-				#intro h2.major {
-					font-size: 1em;
-					margin-bottom: 1em;
-				}
-
-				#intro p {
-					font-size: 0.85em;
-					line-height: 1.5;
-				}
-			}
-
-			/* Rounded corners for all article backgrounds */
-			#main article {
-				border-radius: 20px;
-				overflow: hidden;
-			}
-
-			/* Round the form elements */
-			input[type="text"],
-			input[type="password"],
-			input[type="email"],
-			input[type="tel"],
-			select,
-			textarea {
-				border-radius: 12px;
-			}
-
-			/* Round the buttons */
-			.cta-button,
-			input[type="submit"],
-			input[type="reset"],
-			input[type="button"],
-			button,
-			.button {
-				border-radius: 12px;
-			}
-
-			/* Round the navigation menu */
-			#header nav ul {
-				border-radius: 12px;
-				overflow: hidden;
-			}
-
-			/* Round the social icons */
-			ul.icons li a {
-				border-radius: 12px;
-			}
-
-			/* Round the close button */
-			#main article .close:before {
-				border-radius: 15px;
-			}
-
-			@media screen and (max-width: 736px) {
-				#main article {
-					border-radius: 15px;
-				}
-				
-				.feature-card {
-					border-radius: 12px;
-				}
-			}
-		</style>
 	</head>
 	<body class="is-preload">
-		<div class="lang-switch">
-			<a href="index-zh.html">中文版本</a>
-		</div>
+		<!-- Navigation will be loaded dynamically -->
+
 
 		<!-- Wrapper -->
 			<div id="wrapper">
@@ -507,9 +61,8 @@
 						<nav>
 							<ul>
 								<li><a href="#intro">Introduction</a></li>
-								<li><a href="#work">Function</a></li>
-<!--								<li><a href="#about">Start Journey</a></li>-->
-                                <li><a href="http://curve.sparkingtiming.com">Start Journey</a></li>
+								<li><a href="#work">Event Timing</a></li>
+								<li><a href="curve/index_curve.html?lang=en">Energy Curve</a></li>
 								<li><a href="#contact">Contact</a></li>
 								<!--<li><a href="#elements">Elements</a></li>-->
 							</ul>
@@ -535,16 +88,20 @@
 								So every step lands with purpose, every move hits the sweet spot.</p>
 								
 								<p>Work smarter, not harder.</p>
-							</article>
 
-						<!-- Work -->
-							<article id="work">
-								<h2 class="major en-title">
+								<!-- Move function content here -->
+								<h3 style="margin-top: 2em; color: #9f6cf7; font-size: 1.2em;">
 									<span class="first-line">Energy Projection  X  Productivity Management</span>
 									<span class="second-line">= Flow with Time</span>
-								</h2>
+								</h3>
 								<p class="subtitle">Let energy shape your calendar</p>
-								<span class="image main"><img src="images/pic02_eng.jpg" alt="" /></span>
+								<span class="image main">
+									<video autoplay muted loop playsinline preload="auto" style="width: 100%; height: auto; border-radius: 8px;" onloadstart="console.log('Video loading started')" oncanplay="console.log('Video can play')" onerror="console.log('Video error:', this.error); this.style.display='none'; this.nextElementSibling.style.display='block';">
+										<source src="images/video_eng.mp4" type="video/mp4">
+										Your browser does not support video playback.
+									</video>
+									<img src="images/pic02_eng.jpg" alt="" style="display: none;" />
+								</span>
 								
 								<div class="features-grid">
 									<div class="feature-card">
@@ -571,6 +128,67 @@
 										<h3>Community Co-Creation</h3>
 										<p>Journey with kindred souls</p>
 									</div>
+								</div>
+							</article>
+
+						<!-- Work -->
+							<article id="work">
+								<h2 class="major en-title">Event Timing</h2>
+								<p class="subtitle">Choose the perfect moment for your important decisions and events</p>
+								
+								<form id="event-timing-form" class="event-form">
+									<div class="form-group">
+										<label for="event-name">Event Name</label>
+										<input type="text" id="event-name" name="event-name" class="form-input" placeholder="e.g., moving, exam, etc." required>
+									</div>
+									
+									<div class="form-group">
+										<label for="start-time">Start Time Range</label>
+										<input type="datetime-local" id="start-time" name="start-time" class="form-input" required>
+									</div>
+									
+									<div class="form-group">
+										<label for="end-time">End Time Range</label>
+										<input type="datetime-local" id="end-time" name="end-time" class="form-input" required>
+									</div>
+									
+									<div class="form-group">
+										<label for="event-location">Location</label>
+										<input type="text" id="event-location" name="event-location" class="form-input" placeholder="Enter event location" required>
+									</div>
+									
+									<button type="submit" class="submit-btn">
+										<span class="btn-text">Analyze Optimal Timing</span>
+										<span class="btn-icon">
+											<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+												<path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+											</svg>
+										</span>
+									</button>
+								</form>
+								
+								<!-- Event Timing Chart Section -->
+								<section class="timing-chart-section" style="display: none;">
+									<div class="legend">
+										<div class="legend-item">
+											<span class="legend-color blue"></span>
+											<span>Optimal Time</span>
+										</div>
+										<div class="legend-item">
+											<span class="legend-color purple"></span>
+											<span>Good Time</span>
+										</div>
+										<div class="legend-item">
+											<span class="legend-color pink"></span>
+											<span>Avoid Time</span>
+										</div>
+									</div>
+									<canvas id="timingChart"></canvas>
+								</section>
+								
+								<div id="timing-result" class="result-container" style="display: none;">
+									<h3>Analysis Result</h3>
+									<div id="result-content"></div>
 								</div>
 							</article>
 
@@ -632,7 +250,24 @@
 		<!-- BG -->
 			<div id="bg"></div>
 
+		<!-- Registration Modal -->
+		<div id="registration-modal" class="modal-overlay">
+			<div class="modal-content">
+				<button class="modal-close" onclick="closeRegistrationModal()">&times;</button>
+				<div class="modal-title">
+					Event Timing requires birth information,<br>
+					please login or register to unlock more features and usage permissions!
+				</div>
+				<div class="modal-buttons">
+					<a href="login.html?lang=en" class="modal-login-btn">Login</a>
+					<a href="register.html?lang=en" class="modal-register-btn">Register</a>
+				</div>
+			</div>
+		</div>
+
 		<!-- Scripts -->
+			<!-- Chart.js for timing chart -->
+			<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 			<script src="assets/js/jquery.min.js"></script>
 			<script>
 				// Fallback to CDN if local file fails to load
@@ -646,6 +281,244 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			<script src="assets/js/auth.js"></script>
 
+			<!-- Load navigation system -->
+			<script src="assets/js/navigation-loader.js"></script>
+			<script src="assets/js/navigation.js"></script>
+			
+			<script >
+				// Logo click handler
+				function goToHomePage() {
+					console.log("get to go to home page");
+					if (currentLanguage === 'zh') {
+						window.location.href = 'index-zh.html';
+					} else {
+						window.location.href = 'index.html';
+					}
+				}
+			</script>
+
+			<script>
+				// Check if user is logged in
+				function isUserLoggedIn() {
+					const username_token = localStorage.getItem('username_token');
+					return username_token !== null;
+				}
+
+				function redirectToLogin() {
+					const loginPage = window.NavigationConfig.detectLanguage() === 'en' ? 'login.html?lang=en' : 'login.html?lang=zh';
+					window.location.href = loginPage;
+				}
+
+				// Event Timing Form Functionality
+				document.addEventListener('DOMContentLoaded', function() {
+					const eventForm = document.getElementById('event-timing-form');
+					const resultContainer = document.getElementById('timing-result');
+					const resultContent = document.getElementById('result-content');
+
+					// Close modal when clicking outside
+					document.getElementById('registration-modal').addEventListener('click', function(e) {
+						if (e.target === this) {
+							closeRegistrationModal();
+						}
+					});
+
+					// Auto-fill user data if available
+					try {
+						const userInfo = localStorage.getItem('userInfo');
+						if (userInfo) {
+							const user = JSON.parse(userInfo);
+							
+							// Pre-fill event location with user's birth location if available
+							if (user.birthLocation) {
+								document.getElementById('event-location').value = user.birthLocation;
+							}
+						}
+					} catch (error) {
+						console.error('Error auto-filling user data:', error);
+					}
+
+					if (eventForm) {
+						eventForm.addEventListener('submit', function(e) {
+							e.preventDefault();
+							
+							if(!isUserLoggedIn()){
+								alert(window.NavigationConfig.detectLanguage() === 'zh'? '请先登录！': 'Please log in first!');
+								redirectToLogin();
+								return;
+							}
+							
+							// Get form data
+							const formData = new FormData(eventForm);
+							const eventData = {
+								eventName: formData.get('event-name'),
+								startTime: formData.get('start-time'),
+								endTime: formData.get('end-time'),
+								location: formData.get('event-location')
+							};
+
+							// Validate form
+							if (!eventData.eventName || !eventData.startTime || !eventData.endTime || !eventData.location) {
+								alert('Please fill in all required fields');
+								return;
+							}
+
+							// Validate time range
+							const startDate = new Date(eventData.startTime);
+							const endDate = new Date(eventData.endTime);
+							if (startDate >= endDate) {
+								alert('End time must be later than start time');
+								return;
+							}
+
+							// Show loading state
+							const submitBtn = eventForm.querySelector('.submit-btn');
+							const originalText = submitBtn.textContent;
+							submitBtn.textContent = 'Analyzing...';
+							submitBtn.disabled = true;
+
+							// Simulate API call (replace with actual API endpoint)
+							setTimeout(() => {
+								// Mock response - replace with actual API call
+								const mockResult = generateMockResult(eventData);
+								displayResult(mockResult);
+								
+								// Reset button
+								submitBtn.textContent = originalText;
+								submitBtn.disabled = false;
+							}, 2000);
+						});
+					}
+					
+
+					function generateMockResult(eventData) {
+						// This is a mock function - replace with actual API call
+						const startDate = new Date(eventData.startTime);
+						const endDate = new Date(eventData.endTime);
+						const optimalDate = new Date(startDate.getTime() + (endDate.getTime() - startDate.getTime()) * 0.3);
+						
+						return {
+							optimalTime: optimalDate.toLocaleString('en-US'),
+							energyScore: Math.floor(Math.random() * 30) + 70,
+							recommendation: `Based on your ${eventData.eventName} analysis, we recommend conducting this event on ${optimalDate.toLocaleDateString('en-US')}.`,
+							tips: [
+								'This time period offers optimal energy conditions for your event',
+								'We recommend preparing all necessary materials in advance',
+								'Maintain a positive mindset and go with the flow'
+							]
+						};
+					}
+
+					function displayResult(result) {
+						// Show chart first
+						const chartSection = document.querySelector('.timing-chart-section');
+						chartSection.style.display = 'block';
+						
+						// Create timing chart
+						createTimingChart();
+						
+						resultContent.innerHTML = `
+							<div style="text-align: center; margin-bottom: 1.5em;">
+								<h4 style="color: #9f6cf7; margin-bottom: 0.5em;">Optimal Timing</h4>
+								<p style="font-size: 1.1em; font-weight: bold;">${result.optimalTime}</p>
+								<p style="color: #6f8bf7;">Energy Score: ${result.energyScore}/100</p>
+							</div>
+							<div style="margin-bottom: 1.5em;">
+								<h4 style="color: #9f6cf7; margin-bottom: 0.5em;">Recommendation</h4>
+								<p>${result.recommendation}</p>
+							</div>
+							<div>
+								<h4 style="color: #9f6cf7; margin-bottom: 0.5em;">Tips</h4>
+								<ul style="list-style: none; padding: 0;">
+									${result.tips.map(tip => `<li style="margin-bottom: 0.5em; padding-left: 1em; position: relative;">
+										<span style="position: absolute; left: 0; color: #9f6cf7;">•</span>
+										${tip}
+									</li>`).join('')}
+								</ul>
+							</div>
+						`;
+						
+						resultContainer.style.display = 'block';
+						chartSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+					}
+
+					function createTimingChart() {
+						const ctx = document.getElementById('timingChart').getContext('2d');
+						
+						// Generate sample data for timing analysis
+						const labels = [];
+						const optimalData = [];
+						const goodData = [];
+						const avoidData = [];
+						
+						// Generate 24 hours of data
+						for (let i = 0; i < 24; i++) {
+							labels.push(`${i}:00`);
+							optimalData.push(Math.random() * 40 + 60); // 60-100
+							goodData.push(Math.random() * 30 + 40); // 40-70
+							avoidData.push(Math.random() * 20 + 20); // 20-40
+						}
+						
+						new Chart(ctx, {
+							type: 'line',
+							data: {
+								labels: labels,
+								datasets: [{
+									label: 'Optimal Time',
+									data: optimalData,
+									borderColor: '#5116b4',
+									backgroundColor: 'rgba(81, 22, 180, 0.1)',
+									borderWidth: 2,
+									fill: true
+								}, {
+									label: 'Good Time',
+									data: goodData,
+									borderColor: '#2759ac',
+									backgroundColor: 'rgba(39, 89, 172, 0.1)',
+									borderWidth: 2,
+									fill: true
+								}, {
+									label: 'Avoid Time',
+									data: avoidData,
+									borderColor: '#9444a3',
+									backgroundColor: 'rgba(148, 68, 163, 0.1)',
+									borderWidth: 2,
+									fill: true
+								}]
+							},
+							options: {
+								responsive: true,
+								maintainAspectRatio: false,
+								scales: {
+									y: {
+										beginAtZero: true,
+										max: 100,
+										grid: {
+											color: 'rgba(255, 255, 255, 0.1)'
+										},
+										ticks: {
+											color: '#ffffff'
+										}
+									},
+									x: {
+										grid: {
+											color: 'rgba(255, 255, 255, 0.1)'
+										},
+										ticks: {
+											color: '#ffffff'
+										}
+									}
+								},
+								plugins: {
+									legend: {
+										display: false // Hide default legend as we have custom one
+									}
+								}
+							}
+						});
+					}
+				});
+			</script>
 	</body>
 </html>

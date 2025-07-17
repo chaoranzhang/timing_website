@@ -274,82 +274,20 @@
 		<!-- Load navigation system -->
 		<script src="assets/js/navigation-loader.js"></script>
 		<script src="assets/js/navigation.js"></script>
+		<!-- Language switcher -->
+		<script src="assets/js/language-switcher.js"></script>
 		
 		<script>
-			// Language content
-			const content = {
-				zh: {
-					title: 'Timing - 登录',
-					loginTitle: '欢迎使用Timing',
-					usernameLabel: '用户名/邮箱',
-					usernamePlaceholder: '请输入用户名/邮箱',
-					passwordLabel: '密码',
-					passwordPlaceholder: '请输入密码',
-					rememberLabel: '保持登录状态',
-					forgotPassword: '忘记密码',
-					loginSubmit: '登录',
-					registerText: '还没有账户？',
-					registerLink: '立即注册'
-				},
-				en: {
-					title: 'Timing - Login',
-					loginTitle: 'Welcome to Timing',
-					usernameLabel: 'Username/Email',
-					usernamePlaceholder: 'Enter your username/email',
-					passwordLabel: 'Password',
-					passwordPlaceholder: 'Enter your password',
-					rememberLabel: 'Keep me logged in',
-					forgotPassword: 'Forgot Password',
-					loginSubmit: 'Login',
-					registerText: "Don't have an account?",
-					registerLink: 'Sign Up Now',
-					navIntro: 'Introduction',
-					navWork: 'Function',
-					navCurve: 'Energy Curve',
-					navContact: 'Contact',
-					navLogin: 'SIGN IN',
-					navSignup: 'SIGN UP',
-					navLang: '中文'
-				}
-			};
-			
-			// Update page content based on language
-			function updateContent(lang) {
-				const c = content[lang];
-				
-				// Update page title
-				document.title = c.title;
-				
-				// Update form content
-				document.getElementById('login-title').textContent = c.loginTitle;
-				document.getElementById('username-label').textContent = c.usernameLabel;
-				document.getElementById('username').placeholder = c.usernamePlaceholder;
-				document.getElementById('username').title = c.usernamePlaceholder;
-				document.getElementById('password-label').textContent = c.passwordLabel;
-				document.getElementById('password').placeholder = c.passwordPlaceholder;
-				document.getElementById('password').title = c.passwordPlaceholder;
-				document.getElementById('remember-label').textContent = c.rememberLabel;
-				document.getElementById('forgotPassword').textContent = c.forgotPassword;
-				document.getElementById('login-submit').textContent = c.loginSubmit;
-				document.getElementById('register-text').textContent = c.registerText;
-				document.getElementById('register-link').textContent = c.registerLink;
-			}
-			
-			// Initialize language on navigation load
-			document.addEventListener('navigationLoaded', function(e) {
-				const language = e.detail.language;
-				updateContent(language);
-			});
-			
-			// Forgot password handling
+			// Initialize language when page loads
 			document.addEventListener('DOMContentLoaded', function() {
-				const detectedLang = window.NavigationConfig.detectLanguage();
-				updateContent(detectedLang);
+				// Language will be handled by the language switcher
+				// No need for manual initialization here
 			});
 			
 			// Forgot password handling
 			document.getElementById('forgotPassword').addEventListener('click', function(e) {
 				e.preventDefault();
+				const currentLanguage = window.LanguageSwitcher ? window.LanguageSwitcher.getCurrentLanguage() : 'zh';
 				const message = currentLanguage === 'zh' ? '忘记密码功能将在后端完成后启用' : 'Forgot password functionality will be enabled after backend completion';
 				alert(message);
 			});
@@ -357,11 +295,10 @@
 			// Register link handling
 			document.getElementById('register-link').addEventListener('click', function(e) {
 				e.preventDefault();
-				// Get current language from URL or default to 'zh'
-				const urlParams = new URLSearchParams(window.location.search);
-				const lang = urlParams.get('lang') || 'zh';
+				// Get current language from language switcher or URL
+				const currentLanguage = window.LanguageSwitcher ? window.LanguageSwitcher.getCurrentLanguage() : 'zh';
 				// Navigate to register page with language parameter
-				window.location.href = `register.html?lang=${lang}`;
+				window.location.href = `register.html?lang=${currentLanguage}`;
 			});
 		</script>
 	</body>

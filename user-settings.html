@@ -496,7 +496,7 @@
 
 			// Go to home page after successful save
 			function goToHomePage() {
-				const homePage = currentLanguage === 'en' ? 'index.html' : 'index-zh.html';
+				const homePage = 'index.html?lang=' + currentLanguage;
 				window.location.href = homePage;
 			}
 
@@ -505,7 +505,7 @@
 				if (document.referrer && document.referrer.includes(window.location.origin)) {
 					window.history.back();
 				} else {
-					const homePage = currentLanguage === 'en' ? 'index.html' : 'index-zh.html';
+					const homePage = 'index.html?lang=' + currentLanguage;
 					window.location.href = homePage;
 				}
 			}
@@ -537,7 +537,7 @@
 								const sectionId = href.substring(1);
 								
 								// Navigate to home page with section
-								const homePage = currentLanguage === 'en' ? 'index.html' : 'index-zh.html';
+								const homePage = 'index.html?lang=' + currentLanguage;
 								window.location.href = homePage + '#' + sectionId;
 							});
 						}

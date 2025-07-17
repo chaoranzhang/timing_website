@@ -1024,9 +1024,14 @@ class BirthdayAnalyzer {
         try {
             // 显示加载状态
             submitBtn.disabled = true;
-            // Use language-aware loading text
-            const loadingText = window.currentLanguage === 'zh' ? '推演中...' : 'Calculating...';
-            btnText.textContent = loadingText;
+            // Use language switcher for loading text
+            if (window.LanguageSwitcher) {
+                window.LanguageSwitcher.setSubmitCalculating();
+            } else {
+                // Fallback to manual text setting
+                const loadingText = window.currentLanguage === 'zh' ? '推演中' : 'Calculating...';
+                btnText.textContent = loadingText;
+            }
             console.log('🚀 开始分析生日数据...');
 
             // 从datetime-local格式中提取日期和时间
@@ -1054,8 +1059,10 @@ class BirthdayAnalyzer {
         } finally {
             // 恢复按钮状态
             submitBtn.disabled = false;
-            // Use language-aware default text - let the language system handle this
-            // The language content system will update this automatically
+            // Reset button text using language switcher
+            if (window.LanguageSwitcher) {
+                window.LanguageSwitcher.resetSubmitButton();
+            }
         }
     }
     

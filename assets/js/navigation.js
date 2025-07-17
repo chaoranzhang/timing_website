@@ -210,7 +210,7 @@
             function setupCurveNavigation() {
                 const currentLanguage = window.NavigationConfig ? 
                     window.NavigationConfig.detectLanguage() : 'zh';
-                const homePage = currentLanguage === 'en' ? '../index.html' : '../index-zh.html';
+                const homePage = '../index.html?lang=' + currentLanguage;
                 
                 // Setup navigation links to return to main page
                 document.querySelectorAll('.nav-item').forEach(function(item, index) {

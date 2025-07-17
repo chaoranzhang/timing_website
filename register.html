@@ -131,155 +131,20 @@
 		<!-- Navigation handling -->
 		<script src="assets/js/navigation-loader.js"></script>
 		<script src="assets/js/navigation.js"></script>
+		<!-- Language switcher -->
+		<script src="assets/js/language-switcher.js"></script>
 		
 		<script>
-			// Language detection and content switching
-			let currentLanguage = 'zh'; // Default to Chinese
-			
-			// Detect language from URL parameters or referrer
-			function detectLanguage() {
-				const urlParams = new URLSearchParams(window.location.search);
-				const langParam = urlParams.get('lang');
-				
-				// Priority 1: URL parameter
-				if (langParam === 'en') {
-					return 'en';
-				} else if (langParam === 'zh') {
-					return 'zh';
-				}
-				
-				// Priority 2: Check referrer
-				const referrer = document.referrer;
-				if (referrer) {
-					// Check if coming from English pages
-					if (referrer.includes('index.html') && !referrer.includes('index-zh.html')) {
-						return 'en';
-					}
-					// Check if coming from Chinese pages
-					if (referrer.includes('index-zh.html')) {
-						return 'zh';
-					}
-					// Check for language parameters in referrer
-					if (referrer.includes('lang=en')) {
-						return 'en';
-					}
-					if (referrer.includes('lang=zh')) {
-						return 'zh';
-					}
-				}
-				
-				return 'zh'; // Default to Chinese
-			}
-			
-			// Language content
-			const content = {
-				zh: {
-					title: 'Timing - 注册',
-					registerTitle: '欢迎来到Timing',
-					userNameLabel: '用户名',
-					userNamePlaceholder: '请输入您的用户名',
-					userNameverificationLabel: '用户名或邮箱',
-					userNameverificationPlaceholder: '请输入您的用户名或邮箱',
-					emailLabel: '邮箱',
-					emailPlaceholder: '请输入邮箱地址',
-					verificationLabel: '验证码',
-					verificationPlaceholder: '请输入验证码',
-					verificationResend: '重新发送',
-					passwordLabel: '密码',
-					passwordPlaceholder: '请输入密码',
-					confirmPasswordLabel: '确认密码',
-					confirmPasswordPlaceholder: '请再次输入密码',
-					passwordWarning: '不一致',
-					agreeLabel: '同意服务条款',
-					termsLink: '查看条款',
-					nextBtn: '确认',
-					birthtimeLabel: '出生时间',
-
-					userAgreementLabel: '请阅读并同意用户协议和隐私政策',
-					betaTesterLabel: '申请成为内测用户',
-					registerSubmit: '注册',
-					verificationSubmit: "验证邮箱",
-					loginText: '已有账户？',
-					loginLink: '立即登录',
-
-				},
-				en: {
-					title: 'Timing - Register',
-					registerTitle: 'Welcome to Timing',
-					userNameLabel: 'Username',
-					userNamePlaceholder: 'Please enter your username',
-					userNameverificationLabel: 'Username or Email',
-					userNameverificationPlaceholder: 'Please enter your username or email',
-					emailLabel: 'Email',
-					emailPlaceholder: 'Enter your email address',
-					verificationLabel: 'Verification Code',
-					verificationPlaceholder: 'Enter verification code',
-					verificationResend: 'Resend',
-
-					passwordLabel: 'Password',
-					passwordPlaceholder: 'Enter your password',
-					confirmPasswordLabel: 'Confirm Password',
-					confirmPasswordPlaceholder: 'Enter your password again',
-					passwordWarning: 'Mismatch',
-					agreeLabel: 'Agree to Terms of Service',
-					termsLink: 'View Terms',
-					nextBtn: 'Confirm',
-
-
-					userAgreementLabel: 'Please read and agree to the User Agreement and Privacy Policy',
-					betaTesterLabel: 'Apply to become a beta tester',
-					registerSubmit: 'Register',
-					verificationSubmit: 'Verify Email',
-					loginText: 'Already have an account?',
-					loginLink: 'Sign In Now',
-
-				}
-			};
-			
-			// Update page content based on language
-			function updateContent(lang) {
-				currentLanguage = lang;
-				const c = content[lang];
-				
-				// Update page title
-				document.title = c.title;
-				
-				// Update form content
-				document.getElementById('register-title').textContent = c.registerTitle;
-				document.getElementById('userName-label').textContent = c.userNameLabel;
-				document.getElementById('username').placeholder = c.userNamePlaceholder;
-				document.getElementById('username-verification-label').textContent = c.userNameverificationLabel;
-				document.getElementById('username-verification').placeholder = c.userNameverificationPlaceholder;
-
-				document.getElementById('email-label').textContent = c.emailLabel;
-				document.getElementById('email').placeholder = c.emailPlaceholder;
-				document.getElementById('verification-label').textContent = c.verificationLabel;
-				document.getElementById('verification').placeholder = c.verificationPlaceholder;
-				document.getElementById('verification-resend').textContent = c.verificationResend;
-
-				document.getElementById('password-label').textContent = c.passwordLabel;
-				document.getElementById('password').placeholder = c.passwordPlaceholder;
-				document.getElementById('confirm-password-label').textContent = c.confirmPasswordLabel;
-				document.getElementById('confirmPassword').placeholder = c.confirmPasswordPlaceholder;
-				document.getElementById('password-warning').textContent = c.passwordWarning;
-				document.getElementById('agree-label').textContent = c.agreeLabel;
-				document.getElementById('termsLink').textContent = c.termsLink;
-
-				document.getElementById('register-submit').textContent = c.registerSubmit;
-				document.getElementById('verification-submit').textContent = c.verificationSubmit;
-				document.getElementById('login-text').textContent = c.loginText;
-				document.getElementById('login-link').textContent = c.loginLink;
-				
-			}
-			
+			// Initialize language when page loads
+			document.addEventListener('DOMContentLoaded', function() {
+				// Language will be handled by the language switcher
+				// No need for manual initialization here
+			});
 			
 			// Logo click handler
 			function goToHomePage() {
-				if (currentLanguage === 'zh') {
-					window.location.href = 'index-zh.html';
-				} else {
-					window.location.href = 'index.html';
-				}
+				const currentLanguage = window.LanguageSwitcher ? window.LanguageSwitcher.getCurrentLanguage() : 'zh';
+				window.location.href = 'index.html?lang=' + currentLanguage;
 			}
 
 			// Password validation function
@@ -310,11 +175,8 @@
 			}
 
 			
-			// Initialize language on page load
+			// Initialize page functionality
 			document.addEventListener('DOMContentLoaded', function() {
-				const detectedLang = detectLanguage();
-				updateContent(detectedLang);
-				
 				// Add password validation listeners
 				document.getElementById('password').addEventListener('input', validatePassword);
 				document.getElementById('confirmPassword').addEventListener('input', validatePassword);
@@ -323,6 +185,7 @@
 			// Terms link handling
 			document.getElementById('termsLink').addEventListener('click', function(e) {
 				e.preventDefault();
+				const currentLanguage = window.LanguageSwitcher ? window.LanguageSwitcher.getCurrentLanguage() : 'zh';
 				const message = currentLanguage === 'zh' ? '服务条款功能将在后端完成后启用' : 'Terms of service functionality will be enabled after backend completion';
 				alert(message);
 			});
@@ -330,6 +193,8 @@
 			// Login link handling
 			document.getElementById('login-link').addEventListener('click', function(e) {
 				e.preventDefault();
+				// Get current language from language switcher
+				const currentLanguage = window.LanguageSwitcher ? window.LanguageSwitcher.getCurrentLanguage() : 'zh';
 				// Navigate to login page with current language
 				window.location.href = `login.html?lang=${currentLanguage}`;
 			});

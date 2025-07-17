@@ -17,38 +17,14 @@
                 return langParam;
             }
             
-            // Check filename patterns
-            if (window.location.pathname.includes('index-zh.html')) {
+            // Check browser language
+            const browserLang = navigator.language || navigator.userLanguage;
+            if (browserLang.startsWith('zh')) {
                 return 'zh';
             }
             
-            // Check for curve page with referrer
-            if (window.location.pathname.includes('curve/')) {
-                if (document.referrer.includes('index-zh.html') || 
-                    document.referrer.includes('lang=zh')) {
-                    return 'zh';
-                } else if (document.referrer.includes('index.html') || 
-                          document.referrer.includes('lang=en')) {
-                    return 'en';
-                }
-                // Default to Chinese for curve page
-                return 'zh';
-            }
-            
-            // Check for login/register pages with referrer
-            if (window.location.pathname.includes('login.html') || 
-                window.location.pathname.includes('register.html')) {
-                if (document.referrer.includes('index.html') && !document.referrer.includes('index-zh.html')) {
-                    return 'en';
-                } else if (document.referrer.includes('index-zh.html')) {
-                    return 'zh';
-                }
-                // Default to Chinese
-                return 'en';
-            }
-            
-            // Default based on filename (English for index.html, Chinese otherwise)
-            return !window.location.pathname.includes('index-zh.html') ? 'en' : 'zh';
+            // Default to English
+            return 'en';
         },
 
         // Get page type
@@ -59,9 +35,8 @@
             if (pathname.includes('register.html')) return 'register';
             if (pathname.includes('user-settings.html')) return 'user-settings';
             if (pathname.includes('password-change.html')) return 'password-change';
-            if (pathname.includes('index-zh.html')) return 'home-zh';
-            if (pathname.includes('index.html')) return 'home-en';
-            return 'home-zh'; // default
+            if (pathname.includes('index.html')) return 'home';
+            return 'home'; // default
         },
 
         // Check if user is logged in
@@ -105,7 +80,7 @@
                     src: basePath + 'images/LOGO.png',
                     alt: 'Timing Logo',
                     text: 'Timing',
-                    href: language === 'zh' ? 'index-zh.html' : 'index.html',
+                    href: 'index.html?lang=' + language,
                 },
                 menuItems: [
                     // Menu items removed - keeping navigation structure only
@@ -188,7 +163,7 @@
             }
             
             if (isLoginRegisterPage || isCurvePage || isUserSettingsPage) {
-                const mainPage = isEnglish ? 'index.html' : 'index-zh.html';
+                const mainPage = 'index.html?lang=' + language;
                 const basePath = isCurvePage ? '../' : '';
                 return basePath + mainPage + '#' + item;
             }
@@ -214,7 +189,7 @@
             const isUserSettingsPage = pageType === 'user-settings' || pageType === 'password-change';
             
             if (isCurvePage) {
-                return currentLanguage === 'en' ? '../index-zh.html' : '../index.html';
+                return '../index.html?lang=' + newLanguage;
             }
             
             if (isLoginRegisterPage || isUserSettingsPage) {
@@ -222,7 +197,7 @@
                 return currentPage + '?lang=' + newLanguage;
             }
             
-                return currentLanguage === 'en' ? 'index-zh.html' : 'index.html';
+            return 'index.html?lang=' + newLanguage;
           },
  
           // Get user settings page href
@@ -408,7 +383,7 @@
                 const isUserSettingsPage = pageType === 'user-settings' || pageType === 'password-change';
                 
                 if (isLoginRegisterPage || isCurvePage || isUserSettingsPage) {
-                    const mainPage = language === 'zh' ? 'index-zh.html' : 'index.html';
+                    const mainPage = 'index.html?lang=' + language;
                     const basePath = isCurvePage ? '../' : '';
                     window.location.href = basePath + mainPage;
                     return;

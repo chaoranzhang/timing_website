@@ -341,7 +341,7 @@ class AuthSystem {
             }
             
             setTimeout(() => {
-                window.location.href = this.currentLanguage === 'zh' ? 'index-zh.html' : 'index.html';
+                window.location.href = 'index.html?lang=' + this.currentLanguage;
             }, 2000);
             
         } catch (error) {
@@ -611,7 +611,7 @@ class AuthSystem {
                     }
                     
                     setTimeout(() => {
-                        window.location.href = this.currentLanguage === 'zh' ? 'index-zh.html' : 'index.html';
+                        window.location.href = 'index.html?lang=' + this.currentLanguage;
                     }, 1500);
                 } else {
                     this.showMessage(response.message || this.getMessage('loginFailed'), 'error');
@@ -650,7 +650,7 @@ class AuthSystem {
                 }
                 
                 setTimeout(() => {
-                    window.location.href = this.currentLanguage === 'zh' ? 'index-zh.html' : 'index.html';
+                    window.location.href = 'index.html?lang=' + this.currentLanguage;
                 }, 1500);
             }
             
@@ -692,7 +692,7 @@ class AuthSystem {
                 }
                 
                 setTimeout(() => {
-                    window.location.href = this.currentLanguage === 'zh' ? 'index-zh.html' : 'index.html';
+                    window.location.href = 'index.html?lang=' + this.currentLanguage;
                 }, 1500);
             } else {
                 // 离线登录也失败
@@ -1125,7 +1125,7 @@ class AuthSystem {
                 navAuth.innerHTML = `
                     <a href="login.html${isEnglish ? '?lang=en' : ''}" class="login-btn">${isEnglish ? 'Log In' : '登录'}</a>
                     <a href="register.html${isEnglish ? '?lang=en' : ''}" class="signup-btn">${isEnglish ? 'Sign Up' : '注册'}</a>
-                    <a href="${isEnglish ? 'index.html' : 'index-zh.html'}" class="lang-btn">${isEnglish ? 'ZH' : 'EN'}</a>
+                    <a href="index.html?lang=${isEnglish ? 'en' : 'zh'}" class="lang-btn">${isEnglish ? 'ZH' : 'EN'}</a>
                 `;
             }
             this.showMessage(this.getMessage('logoutSuccess'), 'success');

@@ -1,26 +1,31 @@
 // 生成模拟数据
 function generateMockData() {
-    const times = [];
     const startDate = new Date();
     startDate.setHours(0, 0, 0, 0);
     
-    // 生成90天，每2小时一个点的时间序列
-    for (let day = 0; day < 90; day++) {
-        for (let hour = 0; hour < 24; hour += 2) {
-            const date = new Date(startDate);
-            date.setDate(date.getDate() + day);
-            date.setHours(hour);
-            const timeStr = `${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:00`;
-            times.push(timeStr);
-        }
+    // 生成从今天到一个月后的每四日数据（固定8个点）
+    const daysToShow = 30;
+    
+    // 生成每四日时间标签 - 使用描述性字符串格式
+    const fourDayTimes = [];
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    for (let day = 0; day < daysToShow; day += 4) {
+        const date = new Date(startDate);
+        date.setDate(date.getDate() + day);
+        const monthName = monthNames[date.getMonth()];
+        const dayNum = date.getDate();
+        const timeStr = `${monthName} ${dayNum}`;
+        fourDayTimes.push(timeStr);
     }
     
-    // 生成三条不同特征的曲线
-    function generateCurveData(baseValue, trend, volatility) {
+    // 生成每四日平均能量值
+    function generateFourDayCurveData(baseValue, trend, volatility) {
         const values = [];
         let current = baseValue;
         
-        for (let i = 0; i < times.length; i++) {
+        for (let i = 0; i < fourDayTimes.length; i++) {
             // 添加趋势
             current += trend * (Math.random() - 0.5);
             // 添加波动
@@ -33,20 +38,92 @@ function generateMockData() {
         return values;
     }
     
-    return {
+    const result = {
         health: {
-            time: times,
-            value: generateCurveData(50, 0.1, 4)
+            time: fourDayTimes,
+            value: generateFourDayCurveData(50, 0.1, 4)
         },
         career: {
-            time: times,
-            value: generateCurveData(45, 0.15, 5)
+            time: fourDayTimes,
+            value: generateFourDayCurveData(45, 0.15, 5)
         },
         love: {
-            time: times,
-            value: generateCurveData(55, 0.05, 3)
+            time: fourDayTimes,
+            value: generateFourDayCurveData(55, 0.05, 3)
         }
     };
+    
+    return result;
+}
+
+// 处理API数据为每四日平均值
+function processApiDataToDaily(apiData) {
+    const { health, career, love } = apiData;
+    
+    // 检查数据格式，如果是每日数据（30个点），直接返回
+    if (health.time.length <= 30) {
+        console.log('API返回的已经是每日数据，无需处理');
+        return apiData;
+    }
+    
+    console.log('处理API小时数据为每四日平均值...');
+    
+    // 生成每四日的日期标签（8个点）
+    const startDate = new Date();
+    startDate.setHours(0, 0, 0, 0);
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    const fourDayLabels = [];
+    for (let day = 0; day < 30; day += 4) {
+        const date = new Date(startDate);
+        date.setDate(date.getDate() + day);
+        const monthName = monthNames[date.getMonth()];
+        const dayNum = date.getDate();
+        fourDayLabels.push(`${monthName} ${dayNum}`);
+    }
+    
+    // 计算每四日平均值
+    const hoursPerDay = 24;
+    const daysToShow = 30;
+    const totalHours = daysToShow * hoursPerDay;
+    
+    // 确保我们不超过API数据的长度
+    const maxHours = Math.min(health.value.length, totalHours);
+    const actualDays = Math.floor(maxHours / hoursPerDay);
+    const actualFourDayPeriods = Math.floor(actualDays / 4);
+    
+    const processValues = (values) => {
+        console.log('Processing values, length:', values.length);
+        const fourDayValues = [];
+        for (let period = 0; period < actualFourDayPeriods; period++) {
+            const startIndex = period * 4 * hoursPerDay; // 4 days worth of hours
+            const endIndex = startIndex + (4 * hoursPerDay);
+            const dayValues = values.slice(startIndex, endIndex);
+            const average = dayValues.reduce((sum, val) => sum + val, 0) / dayValues.length;
+            fourDayValues.push(Math.round(average * 10) / 10);
+        }
+        console.log('Processed values, length:', fourDayValues.length);
+        return fourDayValues;
+    };
+    
+    const processedData = {
+        health: {
+            time: fourDayLabels.slice(0, actualFourDayPeriods),
+            value: processValues(health.value)
+        },
+        career: {
+            time: fourDayLabels.slice(0, actualFourDayPeriods),
+            value: processValues(career.value)
+        },
+        love: {
+            time: fourDayLabels.slice(0, actualFourDayPeriods),
+            value: processValues(love.value)
+        }
+    };
+    
+    console.log(`API数据处理完成: ${actualFourDayPeriods}个四日周期，每周期${4 * hoursPerDay}小时数据聚合`);
+    return processedData;
 }
 
 // 调用后端API进行生日分析，失败时使用模拟数据
@@ -85,7 +162,9 @@ async function analyzeBirthdayAPI(userData) {
 
             const data = await response.json();
             console.log(`使用真实API数据 (${endpoint})`);
-            return data;
+            
+            // 处理API数据为每日平均值
+            return processApiDataToDaily(data);
         } catch (error) {
             const errorMsg = window.currentLanguage === 'zh' 
                 ? `API端点 ${endpoint} 不可用: ${error.message}` 
@@ -366,6 +445,7 @@ function slidingWindowLabels(labels, values, zoomLevel, offset = 0) {
 // 主应用逻辑
 class BirthdayAnalyzer {
     constructor() {
+        console.log('BirthdayAnalyzer constructor called');
         this.chart = null;
         this.rawData = null;
         this.currentZoomLevel = 1;
@@ -386,11 +466,15 @@ class BirthdayAnalyzer {
         // 设置全局变量以便onClick事件访问
         window.birthdayAnalyzer = this;
         
+        console.log('Initializing BirthdayAnalyzer components...');
+        
         // 自动填充用户数据
         this.autoFillUserData();
         
         this.initializeEventListeners();
         this.initializeChart();
+        
+        console.log('BirthdayAnalyzer initialization complete');
     }
 
     // 自动填充用户数据
@@ -498,7 +582,7 @@ class BirthdayAnalyzer {
         submitBtn.addEventListener('click', () => this.analyzeBirthday());
         
         // 添加缩放控制按钮事件
-        this.addZoomControls();
+        // this.addZoomControls();
     }
     
     // 测试模拟数据功能
@@ -513,301 +597,301 @@ class BirthdayAnalyzer {
         }
     }
     
-    addZoomControls() {
-        const energySection = document.querySelector('.energy-section');
-        const controlsDiv = document.createElement('div');
-        controlsDiv.className = 'zoom-controls';
-        controlsDiv.style.cssText = `
-            margin-bottom: 20px; 
-            display: flex; 
-            flex-direction: column;
-            gap: 10px; 
-            align-items: center; 
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        `;
+    // addZoomControls() {
+    //     const energySection = document.querySelector('.energy-section');
+    //     const controlsDiv = document.createElement('div');
+    //     controlsDiv.className = 'zoom-controls';
+    //     controlsDiv.style.cssText = `
+    //         margin-bottom: 20px; 
+    //         display: flex; 
+    //         flex-direction: column;
+    //         gap: 10px; 
+    //         align-items: center; 
+    //         padding: 15px;
+    //         background: rgba(255, 255, 255, 0.05);
+    //         border-radius: 12px;
+    //         border: 1px solid rgba(255, 255, 255, 0.1);
+    //     `;
 
-        // 创建信息显示行
-        const infoRow = document.createElement('div');
-        infoRow.className = 'zoom-info-row';
-        infoRow.style.cssText = `
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-        `;
+    //     // 创建信息显示行
+    //     const infoRow = document.createElement('div');
+    //     infoRow.className = 'zoom-info-row';
+    //     infoRow.style.cssText = `
+    //         display: flex;
+    //         align-items: center;
+    //         justify-content: center;
+    //         gap: 10px;
+    //         width: 100%;
+    //     `;
 
-        // 缩放级别显示
-        const zoomInfo = document.createElement('div');
-        zoomInfo.className = 'zoom-info';
-        zoomInfo.style.cssText = `
-            padding: 6px 12px;
-            background: rgba(255,255,255,0.05);
-            color: #E2E8F0;
-            border-radius: 6px;
-            font-size: 12px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
-            white-space: nowrap;
-            min-width: 150px;
-        `;
+    //     // 缩放级别显示
+    //     const zoomInfo = document.createElement('div');
+    //     zoomInfo.className = 'zoom-info';
+    //     zoomInfo.style.cssText = `
+    //         padding: 6px 12px;
+    //         background: rgba(255,255,255,0.05);
+    //         color: #E2E8F0;
+    //         border-radius: 6px;
+    //         font-size: 12px;
+    //         text-align: center;
+    //         border: 1px solid rgba(255,255,255,0.1);
+    //         white-space: nowrap;
+    //         min-width: 150px;
+    //     `;
 
-        // 创建按钮行
-        const buttonRow = document.createElement('div');
-        buttonRow.className = 'zoom-button-row';
-        buttonRow.style.cssText = `
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            width: 100%;
-        `;
+    //     // 创建按钮行
+    //     const buttonRow = document.createElement('div');
+    //     buttonRow.className = 'zoom-button-row';
+    //     buttonRow.style.cssText = `
+    //         display: flex;
+    //         align-items: center;
+    //         justify-content: center;
+    //         gap: 15px;
+    //         width: 100%;
+    //     `;
         
-        // Zoom Out 按钮
-        const zoomOutBtn = document.createElement('button');
-        zoomOutBtn.innerHTML = '⊖';
-        zoomOutBtn.className = 'zoom-out-btn';
-        zoomOutBtn.style.cssText = `
-            padding: 8px;
-            background: transparent;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 18px;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        `;
+    //     // Zoom Out 按钮
+    //     const zoomOutBtn = document.createElement('button');
+    //     zoomOutBtn.innerHTML = '⊖';
+    //     zoomOutBtn.className = 'zoom-out-btn';
+    //     zoomOutBtn.style.cssText = `
+    //         padding: 8px;
+    //         background: transparent;
+    //         color: white;
+    //         border: none;
+    //         cursor: pointer;
+    //         transition: all 0.3s ease;
+    //         font-size: 18px;
+    //         width: 36px;
+    //         height: 36px;
+    //         display: flex;
+    //         align-items: center;
+    //         justify-content: center;
+    //     `;
         
-        // Zoom In 按钮
-        const zoomInBtn = document.createElement('button');
-        zoomInBtn.innerHTML = '⊕';
-        zoomInBtn.className = 'zoom-in-btn';
-        zoomInBtn.style.cssText = zoomOutBtn.style.cssText;
+    //     // Zoom In 按钮
+    //     const zoomInBtn = document.createElement('button');
+    //     zoomInBtn.innerHTML = '⊕';
+    //     zoomInBtn.className = 'zoom-in-btn';
+    //     zoomInBtn.style.cssText = zoomOutBtn.style.cssText;
         
-        // 滑动按钮
-        const slideLeftBtn = document.createElement('button');
-        slideLeftBtn.innerHTML = '◀';
-        slideLeftBtn.className = 'slide-left-btn';
-        slideLeftBtn.style.cssText = `
-            padding: 8px;
-            background: transparent;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 16px;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        `;
+    //     // 滑动按钮
+    //     const slideLeftBtn = document.createElement('button');
+    //     slideLeftBtn.innerHTML = '◀';
+    //     slideLeftBtn.className = 'slide-left-btn';
+    //     slideLeftBtn.style.cssText = `
+    //         padding: 8px;
+    //         background: transparent;
+    //         color: white;
+    //         border: none;
+    //         cursor: pointer;
+    //         transition: all 0.3s ease;
+    //         font-size: 16px;
+    //         width: 32px;
+    //         height: 32px;
+    //         display: flex;
+    //         align-items: center;
+    //         justify-content: center;
+    //     `;
         
-        const slideRightBtn = document.createElement('button');
-        slideRightBtn.innerHTML = '▶';
-        slideRightBtn.className = 'slide-right-btn';
-        slideRightBtn.style.cssText = slideLeftBtn.style.cssText;
+    //     const slideRightBtn = document.createElement('button');
+    //     slideRightBtn.innerHTML = '▶';
+    //     slideRightBtn.className = 'slide-right-btn';
+    //     slideRightBtn.style.cssText = slideLeftBtn.style.cssText;
 
-        // 添加事件监听器
-        zoomOutBtn.addEventListener('click', () => {
-            if (this.currentZoomLevel > 1) {
-                this.adjustOffsetForZoomChange(this.currentZoomLevel, this.currentZoomLevel - 1);
-                this.currentZoomLevel--;
-                this.updateZoomInfo();
-                this.updateChart();
-            }
-        });
+    //     // 添加事件监听器
+    //     zoomOutBtn.addEventListener('click', () => {
+    //         if (this.currentZoomLevel > 1) {
+    //             this.adjustOffsetForZoomChange(this.currentZoomLevel, this.currentZoomLevel - 1);
+    //             this.currentZoomLevel--;
+    //             this.updateZoomInfo();
+    //             this.updateChart();
+    //         }
+    //     });
         
-        zoomInBtn.addEventListener('click', () => {
-            if (this.currentZoomLevel < this.maxZoomLevel) {
-                this.adjustOffsetForZoomChange(this.currentZoomLevel, this.currentZoomLevel + 1);
-                this.currentZoomLevel++;
-                this.updateZoomInfo();
-                this.updateChart();
-            }
-        });
+    //     zoomInBtn.addEventListener('click', () => {
+    //         if (this.currentZoomLevel < this.maxZoomLevel) {
+    //             this.adjustOffsetForZoomChange(this.currentZoomLevel, this.currentZoomLevel + 1);
+    //             this.currentZoomLevel++;
+    //             this.updateZoomInfo();
+    //             this.updateChart();
+    //         }
+    //     });
 
-        slideLeftBtn.addEventListener('click', () => this.slideLeft());
-        slideRightBtn.addEventListener('click', () => this.slideRight());
+    //     slideLeftBtn.addEventListener('click', () => this.slideLeft());
+    //     slideRightBtn.addEventListener('click', () => this.slideRight());
 
-        // 添加悬停效果
-        [zoomOutBtn, zoomInBtn, slideLeftBtn, slideRightBtn].forEach(btn => {
-            btn.addEventListener('mouseenter', () => {
-                btn.style.transform = 'scale(1.1)';
-                btn.style.opacity = '0.8';
-            });
-            btn.addEventListener('mouseleave', () => {
-                btn.style.transform = 'scale(1)';
-                btn.style.opacity = '1';
-            });
-        });
+    //     // 添加悬停效果
+    //     [zoomOutBtn, zoomInBtn, slideLeftBtn, slideRightBtn].forEach(btn => {
+    //         btn.addEventListener('mouseenter', () => {
+    //             btn.style.transform = 'scale(1.1)';
+    //             btn.style.opacity = '0.8';
+    //         });
+    //         btn.addEventListener('mouseleave', () => {
+    //             btn.style.transform = 'scale(1)';
+    //             btn.style.opacity = '1';
+    //         });
+    //     });
 
-        // 组装布局
-        infoRow.appendChild(zoomInfo);
-        buttonRow.appendChild(zoomOutBtn);
-        buttonRow.appendChild(zoomInBtn);
-        buttonRow.appendChild(slideLeftBtn);
-        buttonRow.appendChild(slideRightBtn);
+    //     // 组装布局
+    //     infoRow.appendChild(zoomInfo);
+    //     buttonRow.appendChild(zoomOutBtn);
+    //     buttonRow.appendChild(zoomInBtn);
+    //     buttonRow.appendChild(slideLeftBtn);
+    //     buttonRow.appendChild(slideRightBtn);
 
-        controlsDiv.appendChild(infoRow);
-        controlsDiv.appendChild(buttonRow);
+    //     controlsDiv.appendChild(infoRow);
+    //     controlsDiv.appendChild(buttonRow);
         
-        // 添加响应式样式
-        const style = document.createElement('style');
-        style.textContent = `
-            @media (min-width: 769px) {
-                .zoom-controls {
-                    flex-direction: row !important;
-                    gap: 15px !important;
-                    justify-content: center !important;
-                }
-                .zoom-info-row {
-                    width: auto !important;
-                    flex: 0 0 auto !important;
-                }
-                .zoom-button-row {
-                    width: auto !important;
-                    flex: 0 0 auto !important;
-                }
-            }
-        `;
-        document.head.appendChild(style);
+    //     // 添加响应式样式
+    //     const style = document.createElement('style');
+    //     style.textContent = `
+    //         @media (min-width: 769px) {
+    //             .zoom-controls {
+    //                 flex-direction: row !important;
+    //                 gap: 15px !important;
+    //                 justify-content: center !important;
+    //             }
+    //             .zoom-info-row {
+    //                 width: auto !important;
+    //                 flex: 0 0 auto !important;
+    //             }
+    //             .zoom-button-row {
+    //                 width: auto !important;
+    //                 flex: 0 0 auto !important;
+    //             }
+    //         }
+    //     `;
+    //     document.head.appendChild(style);
         
-        energySection.insertBefore(controlsDiv, energySection.querySelector('canvas'));
-        this.updateZoomInfo();
-    }
+    //     energySection.insertBefore(controlsDiv, energySection.querySelector('canvas'));
+    //     this.updateZoomInfo();
+    // }
     
-    adjustOffsetForZoomChange(fromLevel, toLevel) {
-        if (fromLevel === 1) {
-            // 从3个月视图切换到其他级别，偏移量保持0
-            this.currentOffset = 0;
-            return;
-        }
-        
-        if (toLevel === 1) {
-            // 切换到3个月视图，偏移量重置为0
-            this.currentOffset = 0;
-            return;
-        }
-        
-        // 计算当前显示的时间点在数据中的位置
-        const fromPointsPerGroup = this.getPointsPerGroup(fromLevel);
-        const toPointsPerGroup = this.getPointsPerGroup(toLevel);
-        
-        // 计算当前视图中心点的数据索引
-        const currentCenterIndex = this.currentOffset + (fromPointsPerGroup * 12) / 2;
-        
-        // 计算新级别下应该的偏移量，让中心点保持相同
-        const newOffset = Math.max(0, currentCenterIndex - (toPointsPerGroup * 12) / 2);
-        
-        // 确保偏移量不超过最大值
-        const maxOffset = this.getMaxOffsetForLevel(toLevel);
-        this.currentOffset = Math.min(newOffset, maxOffset);
-    }
+    // adjustOffsetForZoomChange(fromLevel, toLevel) {
+    //     if (fromLevel === 1) {
+    //         // 从3个月视图切换到其他级别，偏移量保持0
+    //         this.currentOffset = 0;
+    //         return;
+    //     }
+    //     
+    //     if (toLevel === 1) {
+    //         // 切换到3个月视图，偏移量重置为0
+    //         this.currentOffset = 0;
+    //         return;
+    //     }
+    //     
+    //     // 计算当前显示的时间点在数据中的位置
+    //     const fromPointsPerGroup = this.getPointsPerGroup(fromLevel);
+    //     const toPointsPerGroup = this.getPointsPerGroup(toLevel);
+    //     
+    //     // 计算当前视图中心点的数据索引
+    //     const currentCenterIndex = this.currentOffset + (fromPointsPerGroup * 12) / 2;
+    //     
+    //     // 计算新级别下应该的偏移量，让中心点保持相同
+    //     const newOffset = Math.max(0, currentCenterIndex - (toPointsPerGroup * 12) / 2);
+    //     
+    //     // 确保偏移量不超过最大值
+    //     const maxOffset = this.getMaxOffsetForLevel(toLevel);
+    //     this.currentOffset = Math.min(newOffset, maxOffset);
+    // }
     
-    getPointsPerGroup(zoomLevel) {
-        switch(zoomLevel) {
-            case 1: return 90;  // 3个月视图
-            case 2: return 30;  // 1个月视图
-            case 3: return 10;  // 10天视图
-            case 4: return 3;   // 3天视图
-            case 5: return 2;   // 2天视图
-            default: return 1;  // 最细节视图
-        }
-    }
+    // getPointsPerGroup(zoomLevel) {
+    //     switch(zoomLevel) {
+    //         case 1: return 90;  // 3个月视图
+    //         case 2: return 30;  // 1个月视图
+    //         case 3: return 10;  // 10天视图
+    //         case 4: return 3;   // 3天视图
+    //         case 5: return 2;   // 2天视图
+    //         default: return 1;  // 最细节视图
+    //     }
+    // }
     
-    getMaxOffsetForLevel(zoomLevel) {
-        if (!this.rawData) return 0;
-        
-        const dataLength = this.rawData.health.value.length;
-        const pointsPerGroup = this.getPointsPerGroup(zoomLevel);
-        
-        return Math.max(0, dataLength - pointsPerGroup * 12);
-    }
+    // getMaxOffsetForLevel(zoomLevel) {
+    //     if (!this.rawData) return 0;
+    //     
+    //     const dataLength = this.rawData.health.value.length;
+    //     const pointsPerGroup = this.getPointsPerGroup(zoomLevel);
+    //     
+    //     return Math.max(0, dataLength - pointsPerGroup * 12);
+    // }
 
-    slideLeft() {
-        if (this.currentZoomLevel === 1) return; // 3个月视图不需要滑动
+    // slideLeft() {
+    //     if (this.currentZoomLevel === 1) return; // 3个月视图不需要滑动
         
-        const slideStep = this.getSlideStep();
-        this.currentOffset = Math.max(0, this.currentOffset - slideStep);
-        this.updateChart();
-        this.updateSlideButtons();
-    }
+    //     const slideStep = this.getSlideStep();
+    //     this.currentOffset = Math.max(0, this.currentOffset - slideStep);
+    //     this.updateChart();
+    //     this.updateSlideButtons();
+    // }
     
-    slideRight() {
-        if (this.currentZoomLevel === 1) return; // 3个月视图不需要滑动
+    // slideRight() {
+    //     if (this.currentZoomLevel === 1) return; // 3个月视图不需要滑动
         
-        const slideStep = this.getSlideStep();
-        const maxOffset = this.getMaxOffset();
-        this.currentOffset = Math.min(maxOffset, this.currentOffset + slideStep);
-        this.updateChart();
-        this.updateSlideButtons();
-    }
+    //     const slideStep = this.getSlideStep();
+    //     const maxOffset = this.getMaxOffset();
+    //     this.currentOffset = Math.min(maxOffset, this.currentOffset + slideStep);
+    //     this.updateChart();
+    //     this.updateSlideButtons();
+    // }
     
-    getSlideStep() {
-        // 根据缩放级别计算滑动步长
-        const pointsPerGroup = this.getPointsPerGroup(this.currentZoomLevel);
-        return pointsPerGroup * 12; // 滑动一个完整视图的宽度
-    }
+    // getSlideStep() {
+    //     // 根据缩放级别计算滑动步长
+    //     const pointsPerGroup = this.getPointsPerGroup(this.currentZoomLevel);
+    //     return pointsPerGroup * 12; // 滑动一个完整视图的宽度
+    // }
     
-    getMaxOffset() {
-        return this.getMaxOffsetForLevel(this.currentZoomLevel);
-    }
+    // getMaxOffset() {
+    //     return this.getMaxOffsetForLevel(this.currentZoomLevel);
+    // }
     
-    updateSlideButtons() {
-        const slideLeftBtn = document.querySelector('.slide-left-btn');
-        const slideRightBtn = document.querySelector('.slide-right-btn');
-        const maxOffset = this.getMaxOffset();
-        
-        if (slideLeftBtn) {
-            const canSlideLeft = this.currentOffset > 0 && this.currentZoomLevel > 1;
-            slideLeftBtn.disabled = !canSlideLeft;
-            slideLeftBtn.style.opacity = slideLeftBtn.disabled ? '0.3' : '1';
-            slideLeftBtn.style.cursor = slideLeftBtn.disabled ? 'not-allowed' : 'pointer';
-            slideLeftBtn.style.display = this.currentZoomLevel === 1 ? 'none' : 'flex';
-        }
-        
-        if (slideRightBtn) {
-            const canSlideRight = this.currentOffset < maxOffset && this.currentZoomLevel > 1;
-            slideRightBtn.disabled = !canSlideRight;
-            slideRightBtn.style.opacity = slideRightBtn.disabled ? '0.3' : '1';
-            slideRightBtn.style.cursor = slideRightBtn.disabled ? 'not-allowed' : 'pointer';
-            slideRightBtn.style.display = this.currentZoomLevel === 1 ? 'none' : 'flex';
-        }
-    }
+    // updateSlideButtons() {
+    //     const slideLeftBtn = document.querySelector('.slide-left-btn');
+    //     const slideRightBtn = document.querySelector('.slide-right-btn');
+    //     const maxOffset = this.getMaxOffset();
+    //     
+    //     if (slideLeftBtn) {
+    //         const canSlideLeft = this.currentOffset > 0 && this.currentZoomLevel > 1;
+    //         slideLeftBtn.disabled = !canSlideLeft;
+    //         slideLeftBtn.style.opacity = slideLeftBtn.disabled ? '0.3' : '1';
+    //         slideLeftBtn.style.cursor = slideLeftBtn.disabled ? 'not-allowed' : 'pointer';
+    //         slideLeftBtn.style.display = this.currentZoomLevel === 1 ? 'none' : 'flex';
+    //     }
+    //     
+    //     if (slideRightBtn) {
+    //         const canSlideRight = this.currentOffset < maxOffset && this.currentZoomLevel > 1;
+    //         slideRightBtn.disabled = !canSlideRight;
+    //         slideRightBtn.style.opacity = slideRightBtn.disabled ? '0.3' : '1';
+    //         slideRightBtn.style.cursor = slideRightBtn.disabled ? 'not-allowed' : 'pointer';
+    //         slideRightBtn.style.display = this.currentZoomLevel === 1 ? 'none' : 'flex';
+    //     }
+    // }
 
-    updateZoomInfo() {
-        const zoomInfo = document.querySelector('.zoom-info');
-        if (!zoomInfo) return;
+    // updateZoomInfo() {
+    //     const zoomInfo = document.querySelector('.zoom-info');
+    //     if (!zoomInfo) return;
 
-        const windowSize = this.currentZoomLevel;
-        const timespan = this.getTimespanDescription(windowSize, 12);
-        
-        zoomInfo.textContent = `级别${this.currentZoomLevel} ${timespan}`;
-        
-        // 更新按钮状态
-        const zoomOutBtn = document.querySelector('.zoom-out-btn');
-        const zoomInBtn = document.querySelector('.zoom-in-btn');
-        
-        if (zoomOutBtn) {
-            zoomOutBtn.disabled = this.currentZoomLevel <= 1;
-            zoomOutBtn.style.opacity = zoomOutBtn.disabled ? '0.5' : '1';
-            zoomOutBtn.style.cursor = zoomOutBtn.disabled ? 'not-allowed' : 'pointer';
-        }
-        
-        if (zoomInBtn) {
-            zoomInBtn.disabled = this.currentZoomLevel >= this.maxZoomLevel;
-            zoomInBtn.style.opacity = zoomInBtn.disabled ? '0.5' : '1';
-            zoomInBtn.style.cursor = zoomInBtn.disabled ? 'not-allowed' : 'pointer';
-        }
-    }
+    //     const windowSize = this.currentZoomLevel;
+    //     const timespan = this.getTimespanDescription(windowSize, 12);
+    //     
+    //     zoomInfo.textContent = `级别${this.currentZoomLevel} ${timespan}`;
+    //     
+    //     // 更新按钮状态
+    //     const zoomOutBtn = document.querySelector('.zoom-out-btn');
+    //     const zoomInBtn = document.querySelector('.zoom-in-btn');
+    //     
+    //     if (zoomOutBtn) {
+    //         zoomOutBtn.disabled = this.currentZoomLevel <= 1;
+    //         zoomOutBtn.style.opacity = zoomOutBtn.disabled ? '0.5' : '1';
+    //         zoomOutBtn.style.cursor = zoomOutBtn.disabled ? 'not-allowed' : 'pointer';
+    //     }
+    //     
+    //     if (zoomInBtn) {
+    //         zoomInBtn.disabled = this.currentZoomLevel >= this.maxZoomLevel;
+    //         zoomInBtn.style.opacity = zoomInBtn.disabled ? '0.5' : '1';
+    //         zoomInBtn.style.cursor = zoomInBtn.disabled ? 'not-allowed' : 'pointer';
+    //     }
+    // }
     
     getTimespanDescription(zoomLevel, dataPoints) {
         // 根据缩放级别计算每个显示点代表的时间跨度
@@ -845,20 +929,20 @@ class BirthdayAnalyzer {
     }
 
     initializeChart() {
-        const ctx = document.getElementById('energyChart').getContext('2d');
+        console.log('Initializing chart...');
+        const canvas = document.getElementById('energyChart');
+        if (!canvas) {
+            console.error('Canvas element not found!');
+            return;
+        }
         
-        // 创建渐变色
-        const healthGradient = ctx.createLinearGradient(0, 0, 0, 400);
-        healthGradient.addColorStop(0, 'rgba(81, 22, 180, 0.3)');
-        healthGradient.addColorStop(1, 'rgba(81, 22, 180, 0.05)');
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+            console.error('Could not get 2D context!');
+            return;
+        }
         
-        const careerGradient = ctx.createLinearGradient(0, 0, 0, 400);
-        careerGradient.addColorStop(0, 'rgba(39, 89, 172, 0.3)');
-        careerGradient.addColorStop(1, 'rgba(39, 89, 172, 0.05)');
-        
-        const loveGradient = ctx.createLinearGradient(0, 0, 0, 400);
-        loveGradient.addColorStop(0, 'rgba(148, 68, 163, 0.3)');
-        loveGradient.addColorStop(1, 'rgba(148, 68, 163, 0.05)');
+        console.log('Canvas and context found, creating chart...');
         
         // Get language-aware labels
         const getLabels = () => {
@@ -871,7 +955,8 @@ class BirthdayAnalyzer {
         
         const labels = getLabels();
         
-        this.chart = new Chart(ctx, {
+        try {
+            this.chart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: [],
@@ -880,28 +965,43 @@ class BirthdayAnalyzer {
                         label: labels[0],
                         data: [],
                         borderColor: '#5116b4',
-                        backgroundColor: healthGradient,
-                        tension: 0.8,
-                        fill: true,
-                        borderWidth: 5
+                        backgroundColor: 'rgba(81, 22, 180, 0.1)',
+                        tension: 0.4,
+                        fill: false,
+                        borderWidth: 3,
+                        pointRadius: 0,
+                        pointHoverRadius: 6,
+                        pointHoverBackgroundColor: '#5116b4',
+                        pointHoverBorderColor: '#ffffff',
+                        pointHoverBorderWidth: 2
                     },
                     {
                         label: labels[1],
                         data: [],
                         borderColor: '#2759ac',
-                        backgroundColor: careerGradient,
-                        tension: 0.8,
-                        fill: true,
-                        borderWidth: 5
+                        backgroundColor: 'rgba(39, 89, 172, 0.1)',
+                        tension: 0.4,
+                        fill: false,
+                        borderWidth: 3,
+                        pointRadius: 0,
+                        pointHoverRadius: 6,
+                        pointHoverBackgroundColor: '#2759ac',
+                        pointHoverBorderColor: '#ffffff',
+                        pointHoverBorderWidth: 2
                     },
                     {
                         label: labels[2],
                         data: [],
                         borderColor: '#9444a3',
-                        backgroundColor: loveGradient,
-                        tension: 0.8,
-                        fill: true,
-                        borderWidth: 5
+                        backgroundColor: 'rgba(148, 68, 163, 0.1)',
+                        tension: 0.4,
+                        fill: false,
+                        borderWidth: 3,
+                        pointRadius: 0,
+                        pointHoverRadius: 6,
+                        pointHoverBackgroundColor: '#9444a3',
+                        pointHoverBorderColor: '#ffffff',
+                        pointHoverBorderWidth: 2
                     }
                 ]
             },
@@ -910,8 +1010,8 @@ class BirthdayAnalyzer {
                 maintainAspectRatio: false,
                 interaction: {
                     intersect: false,
-                    mode: 'nearest',
-                    axis: 'xy'
+                    mode: 'index',
+                    axis: 'x'
                 },
                 onHover: (event, elements) => {
                     // 移除之前的tooltip
@@ -924,15 +1024,7 @@ class BirthdayAnalyzer {
                         const element = elements[0];
                         const datasetIndex = element.datasetIndex;
                         const dataIndex = element.index;
-                        
-                        // 检查悬停的是否是白色圆点（最高点）
-                        const dataset = window.birthdayAnalyzer.chart.data.datasets[datasetIndex];
-                        const pointRadius = dataset.pointRadius;
-                        const isMaxPoint = Array.isArray(pointRadius) ? pointRadius[dataIndex] > 0 : pointRadius > 0;
-                        
-                        if (isMaxPoint) {
-                            window.birthdayAnalyzer.showTooltipAtPoint(event, datasetIndex, dataIndex);
-                        }
+                        window.birthdayAnalyzer.showTooltipAtPoint(event, datasetIndex, dataIndex);
                     }
                 },
                 plugins: {
@@ -940,45 +1032,61 @@ class BirthdayAnalyzer {
                         display: false
                     },
                     tooltip: {
-                        enabled: false,  // 禁用默认的悬停tooltip
-                        external: function(context) {
-                            // 自定义tooltip显示逻辑
-                            return;
-                        }
+                        enabled: false
                     }
                 },
                 scales: {
                     x: {
+                        type: 'category',
                         grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
+                            color: 'rgba(255, 255, 255, 0.1)',
+                            drawBorder: false
                         },
                         ticks: {
                             color: '#E2E8F0',
-                            maxRotation: 45,
-                            minRotation: 45,
+                            maxRotation: 0,
+                            minRotation: 0,
                             font: {
-                                size: 14
+                                size: 12,
+                                weight: '500'
                             },
-                            maxTicksLimit: 12 // 始终最多显示12个刻度
+                            maxTicksLimit: 15,
+                            callback: function(value, index, values) {
+                                // Show every label to display more dates
+                                return this.getLabelForValue(value);
+                            }
+                        },
+                        border: {
+                            display: false
                         }
                     },
                     y: {
-                        min: 55,
-                        max: 105,
                         grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
+                            color: 'rgba(255, 255, 255, 0.1)',
+                            drawBorder: false
                         },
                         ticks: {
                             color: '#E2E8F0',
                             font: {
-                                size: 14
+                                size: 12,
+                                weight: '500'
+                            },
+                            callback: function(value) {
+                                return value + '%';
                             }
                         },
-                        display: false
+                        border: {
+                            display: false
+                        }
                     }
                 }
             }
         });
+        
+        console.log('Chart created successfully');
+        } catch (error) {
+            console.error('Error creating chart:', error);
+        }
     }
 
     async analyzeBirthday() {
@@ -1069,13 +1177,11 @@ class BirthdayAnalyzer {
     updateChart() {
         if (!this.rawData) return;
         
-        // 应用滑动窗口平均到数据
-        const healthValues = slidingWindowAverage(this.rawData.health.value, this.currentZoomLevel, this.currentOffset);
-        const careerValues = slidingWindowAverage(this.rawData.career.value, this.currentZoomLevel, this.currentOffset);
-        const loveValues = slidingWindowAverage(this.rawData.love.value, this.currentZoomLevel, this.currentOffset);
-        
-        // 应用滑动窗口到时间标签
-        const timeLabels = slidingWindowLabels(this.rawData.health.time, this.rawData.health.value, this.currentZoomLevel, this.currentOffset);
+        // 直接使用原始数据，不进行缩放处理
+        const healthValues = this.rawData.health.value;
+        const careerValues = this.rawData.career.value;
+        const loveValues = this.rawData.love.value;
+        const timeLabels = this.rawData.health.time;
         
         // 构造处理后的数据对象
         const processedData = {
@@ -1084,83 +1190,37 @@ class BirthdayAnalyzer {
             love: { value: loveValues, time: timeLabels }
         };
         
+        // 计算动态Y轴边界
+        const allValues = [...healthValues, ...careerValues, ...loveValues];
+        const minValue = Math.min(...allValues);
+        const maxValue = Math.max(...allValues);
+        
+        // 添加10%的padding
+        const range = maxValue - minValue;
+        const padding = range * 0.1;
+        const yMin = Math.max(0, Math.floor(minValue - padding));
+        const yMax = Math.min(100, Math.ceil(maxValue + padding));
+        
         // 更新图表数据
         this.chart.data.labels = processedData.health.time;
         this.chart.data.datasets[0].data = processedData.health.value;
         this.chart.data.datasets[1].data = processedData.career.value;
         this.chart.data.datasets[2].data = processedData.love.value;
+        
+        // 更新Y轴边界
+        this.chart.options.scales.y.min = yMin;
+        this.chart.options.scales.y.max = yMax;
 
         // 根据处理后的数据设置高亮点
         this.setHighlightPoints(processedData);
-        
-        // 更新缩放信息显示
-        this.updateZoomInfo();
         
         this.chart.update();
     }
     
     setHighlightPoints(data) {
-        // 找出每条曲线的最高点
-        function findMaximumPoints(values) {
-            const maxValue = Math.max(...values);
-            const maxIndices = [];
-            values.forEach((value, index) => {
-                if (value === maxValue) {
-                    maxIndices.push(index);
-                }
-            });
-            return maxIndices;
-        }
-        
-        // 为每条曲线找出最高点
-        const healthMaxima = findMaximumPoints(data.health.value);
-        const careerMaxima = findMaximumPoints(data.career.value);
-        const loveMaxima = findMaximumPoints(data.love.value);
-        
-        // 创建点半径数组，只在最高点显示白色圆点
-        function makePointRadius(length, maxima) {
-            const arr = new Array(length).fill(0);
-            maxima.forEach(i => arr[i] = 8);
-            return arr;
-        }
-        
-        // 创建点颜色数组，最高点为白色，其他透明
-        function makePointColor(length, maxima) {
-            const arr = new Array(length).fill('rgba(0,0,0,0)');
-            maxima.forEach(i => arr[i] = '#FFFFFF');
-            return arr;
-        }
-        
-        // 创建点击检测半径数组，让白色圆点更容易被检测到
-        function makePointHitRadius(length, maxima) {
-            const arr = new Array(length).fill(1);
-            maxima.forEach(i => arr[i] = 15); // 增大检测半径
-            return arr;
-        }
-        
-        // 统一显示能量最高点的白色圆点（不再区分月视图和日视图）
-        this.chart.data.datasets[0].pointRadius = makePointRadius(data.health.value.length, healthMaxima);
-        this.chart.data.datasets[1].pointRadius = makePointRadius(data.career.value.length, careerMaxima);
-        this.chart.data.datasets[2].pointRadius = makePointRadius(data.love.value.length, loveMaxima);
-        
-        this.chart.data.datasets[0].pointBackgroundColor = makePointColor(data.health.value.length, healthMaxima);
-        this.chart.data.datasets[1].pointBackgroundColor = makePointColor(data.career.value.length, careerMaxima);
-        this.chart.data.datasets[2].pointBackgroundColor = makePointColor(data.love.value.length, loveMaxima);
-        
-        // 设置点的边框颜色，使白色圆点更明显
-        this.chart.data.datasets[0].pointBorderColor = makePointColor(data.health.value.length, healthMaxima).map(c => c === '#FFFFFF' ? '#5116b4' : 'rgba(0,0,0,0)');
-        this.chart.data.datasets[1].pointBorderColor = makePointColor(data.career.value.length, careerMaxima).map(c => c === '#FFFFFF' ? '#2759ac' : 'rgba(0,0,0,0)');
-        this.chart.data.datasets[2].pointBorderColor = makePointColor(data.love.value.length, loveMaxima).map(c => c === '#FFFFFF' ? '#9444a3' : 'rgba(0,0,0,0)');
-        
-        // 设置点的边框宽度
-        this.chart.data.datasets[0].pointBorderWidth = makePointRadius(data.health.value.length, healthMaxima).map(r => r > 0 ? 2 : 0);
-        this.chart.data.datasets[1].pointBorderWidth = makePointRadius(data.career.value.length, careerMaxima).map(r => r > 0 ? 2 : 0);
-        this.chart.data.datasets[2].pointBorderWidth = makePointRadius(data.love.value.length, loveMaxima).map(r => r > 0 ? 2 : 0);
-        
-        // 设置点击检测半径，让白色圆点更容易被检测到
-        this.chart.data.datasets[0].pointHitRadius = makePointHitRadius(data.health.value.length, healthMaxima);
-        this.chart.data.datasets[1].pointHitRadius = makePointHitRadius(data.career.value.length, careerMaxima);
-        this.chart.data.datasets[2].pointHitRadius = makePointHitRadius(data.love.value.length, loveMaxima);
+        // For clean linear chart, we don't need special highlighting
+        // All points will be handled by the chart configuration
+        // This method is kept for compatibility but doesn't modify the chart
     }
     
     showTooltipAtPoint(event, datasetIndex, dataIndex) {
@@ -1211,19 +1271,17 @@ class BirthdayAnalyzer {
         };
         
         // Language-aware tooltip text
-        const timeLabel = window.currentLanguage === 'zh' ? '时间' : 'Time';
-        const peakLabel = window.currentLanguage === 'zh' ? '⭐ 能量最高点' : '⭐ Peak Energy Point';
+        const dateLabel = window.currentLanguage === 'zh' ? '日期' : 'Date';
+        const energyLabel = window.currentLanguage === 'zh' ? '能量值' : 'Energy';
         
         tooltip.innerHTML = `
-            <div style="margin-bottom: 6px; font-weight: bold; color: #E2E8F0;">
-                ${timeLabel}: ${label}
+            <div style="margin-bottom: 4px; font-weight: 600; color: #E2E8F0; font-size: 11px;">
+                ${dateLabel}: ${label}
             </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <div style="width: 8px; height: 8px; border-radius: 50%; background: ${colors[curveName]};"></div>
-                <span style="font-weight: bold;">${curveName}</span>
-            </div>
-            <div style="margin-top: 4px; font-size: 12px; color: #A0AEC0;">
-                ${peakLabel}
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <div style="width: 6px; height: 6px; border-radius: 50%; background: ${colors[curveName]};"></div>
+                <span style="font-weight: 600; font-size: 11px;">${curveName}</span>
+                <span style="color: #A0AEC0; font-size: 11px;">${energyLabel}: ${value}%</span>
             </div>
         `;
         
@@ -1268,5 +1326,10 @@ class BirthdayAnalyzer {
 
 // 页面加载时初始化应用
 document.addEventListener('DOMContentLoaded', () => {
-    new BirthdayAnalyzer();
+    console.log('DOMContentLoaded event fired');
+    try {
+        new BirthdayAnalyzer();
+    } catch (error) {
+        console.error('Error initializing BirthdayAnalyzer:', error);
+    }
 }); 

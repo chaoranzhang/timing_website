@@ -1,0 +1,191 @@
+/* Payment Page Styles */
+.payment-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1b1f22 0%, #2d3748 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.payment-content {
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+}
+
+.payment-title {
+    color: #ffffff;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, #9f6cf7, #6f8bf7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.payment-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.1rem;
+    margin-bottom: 3rem;
+    line-height: 1.6;
+}
+
+.payment-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.price-display {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(45deg, #9f6cf7, #6f8bf7);
+    border-radius: 15px;
+    color: white;
+}
+
+.currency {
+    font-size: 1.5rem;
+    font-weight: 600;
+    vertical-align: top;
+}
+
+.amount {
+    font-size: 4rem;
+    font-weight: 700;
+    margin: 0 0.5rem;
+}
+
+.period {
+    font-size: 1.2rem;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+.features-list {
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+}
+
+.feature-icon {
+    color: #4CAF50;
+    font-weight: bold;
+    margin-right: 1rem;
+    font-size: 1.2rem;
+}
+
+.card-element {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.card-errors {
+    color: #f44336;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    min-height: 20px;
+}
+
+.payment-submit-btn {
+    width: 100%;
+    background: linear-gradient(45deg, #9f6cf7, #6f8bf7);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(159, 108, 247, 0.3);
+}
+
+.payment-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(159, 108, 247, 0.4);
+}
+
+.payment-submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.payment-info {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.payment-info p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* Payment button in navigation */
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .payment-container {
+        padding: 1rem;
+    }
+    
+    .payment-title {
+        font-size: 2rem;
+    }
+    
+    .payment-card {
+        padding: 2rem 1.5rem;
+    }
+    
+    .amount {
+        font-size: 3rem;
+    }
+}
+
+/* Payment message styles */
+.payment-message {
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Payment info section styles */
+.payment-info-section {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.payment-description {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    padding: 0 1rem;
+} 

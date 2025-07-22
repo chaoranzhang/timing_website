@@ -1,0 +1,309 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Payment - Energy Flow Analysis</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https:; connect-src 'self' http: https:; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' data: https: fonts.googleapis.com fonts.gstatic.com;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Load main site CSS -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/navigation.css">
+    <link rel="stylesheet" href="assets/css/noscript.css" media="none">
+    <link rel="stylesheet" href="assets/css/payment.css">
+    
+    <style>
+        /* Payment page specific styles */
+        body {
+            background: #1b1f22;
+            position: relative;
+            overflow-x: hidden;
+            padding-top: 0;
+            min-height: 100vh;
+        }
+
+        /* Background system */
+        #bg {
+            -moz-transform: scale(1.0);
+            -webkit-transform: scale(1.0);
+            -ms-transform: scale(1.0);
+            transform: scale(1.0);
+            -webkit-backface-visibility: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 1;
+        }
+
+        #bg:before, #bg:after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #bg:before {
+            -moz-transition: background-color 2.5s ease-in-out;
+            -webkit-transition: background-color 2.5s ease-in-out;
+            -ms-transition: background-color 2.5s ease-in-out;
+            transition: background-color 2.5s ease-in-out;
+            -moz-transition-delay: 0.75s;
+            -webkit-transition-delay: 0.75s;
+            -ms-transition-delay: 0.75s;
+            transition-delay: 0.75s;
+            background-image: linear-gradient(to top, rgba(19, 21, 25, 0.5), rgba(19, 21, 25, 0.5));
+            background-size: auto;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 2;
+        }
+
+        #bg:after {
+            -moz-transform: scale(1.0825);
+            -webkit-transform: scale(1.0825);
+            -ms-transform: scale(1.0825);
+            transform: scale(1.0825);
+            -moz-transition: -moz-transform 0.325s ease-in-out, -moz-filter 0.325s ease-in-out;
+            -webkit-transition: -webkit-transform 0.325s ease-in-out, -webkit-filter 0.325s ease-in-out;
+            -ms-transition: -ms-transform 0.325s ease-in-out, -ms-filter 0.325s ease-in-out;
+            transition: transform 0.325s ease-in-out, filter 0.325s ease-in-out;
+            background-image: url("images/bg.jpg");
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            -moz-filter: blur(0.2rem);
+            -webkit-filter: blur(0.2rem);
+            -ms-filter: blur(0.2rem);
+            filter: blur(0.2rem);
+            z-index: 1;
+        }
+
+        /* Payment container */
+        .payment-container {
+            position: relative;
+            z-index: 3;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            padding-top: 6rem;
+        }
+
+        .payment-content {
+            background: linear-gradient(135deg, #1b1f22 0%, #2d3748 100%);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .payment-title {
+            color: #ffffff;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #9f6cf7, #6f8bf7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .payment-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .price-display {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .price-amount {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 0.2rem;
+        }
+
+        .price-currency {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .price-period {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 400;
+        }
+
+        .features-list {
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+        }
+
+        .feature-icon {
+            color: #4CAF50;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            font-weight: bold;
+        }
+
+        .payment-button {
+            background: linear-gradient(45deg, #9f6cf7, #6f8bf7);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 auto 1rem auto;
+            width: 100%;
+            max-width: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .payment-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(159, 108, 247, 0.4);
+        }
+
+        .payment-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .payment-info {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        .back-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 1rem;
+            margin-top: 2rem;
+            display: inline-block;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #ffffff;
+        }
+
+
+
+
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .payment-content {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            .payment-title {
+                font-size: 2rem;
+            }
+            
+            .payment-subtitle {
+                font-size: 1rem;
+            }
+            
+            .price-amount {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div id="bg"></div>
+
+    <!-- Payment Container -->
+    <div class="payment-container">
+        <div class="payment-content">
+                    <h1 class="payment-title" id="payment-title">限时特惠：解锁能量流分析</h1>
+        <p class="payment-subtitle" id="payment-subtitle">特别活动：仅需 $0.99 获得一年的能量流分析功能访问权限</p>
+            
+            <div class="price-display">
+                <div class="price-amount">
+                    <span class="price-currency">$</span>0.99<span class="price-period" id="price-period">/年</span>
+                </div>
+            </div>
+            
+            <div class="features-list">
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span id="feature-1">完整的能量流分析</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span id="feature-2">健康、事业、爱情预测</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span id="feature-3">一年内无限次使用</span>
+                </div>
+            </div>
+            
+            <button class="payment-button" id="payment-button">
+                <span id="payment-button-text">立即抢购</span>
+            </button>
+            
+
+            
+            <a href="index.html" class="back-link" id="back-link">← 返回首页</a>
+        </div>
+    </div>
+
+    <!-- Configuration -->
+    <script src="config.js"></script>
+    
+    <!-- Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
+    
+    <!-- Scripts -->
+    <script src="assets/js/navigation-loader.js"></script>
+    <script src="assets/js/payment-page.js"></script>
+</body>
+</html> 

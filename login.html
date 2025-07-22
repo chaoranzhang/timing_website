@@ -1,0 +1,352 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>登录 - Timing</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+		<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="assets/css/navigation.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<style>
+		/* Login page specific styles */
+		.login-container {
+			position: relative;
+			z-index: 3;
+			min-height: calc(100vh - 5rem);
+			display: flex;
+			align-items: center; /* changed from flex-start to center for vertical alignment */
+			justify-content: center;
+			padding: 0 2rem 2rem; /* match register-container */
+		}
+
+		.login-content {
+			background-color: rgba(27, 31, 34, 0.85);
+			border-radius: 12px;
+			padding: 3rem 2.5rem 2rem 2.5rem;
+			width: 28rem;
+			max-width: 100%;
+			position: relative;
+		}
+
+		.login-title {
+			text-align: center;
+			color: #ffffff;
+			font-size: 1.8rem;
+			font-weight: 300;
+			margin-bottom: 2rem;
+			letter-spacing: 0.1em;
+		}
+
+		.form-group {
+			margin-bottom: 1.5rem;
+		}
+
+		.form-group label {
+			display: block;
+			margin-bottom: 0.5rem;
+			font-weight: 600;
+			color: #ffffff;
+			font-size: 0.9rem;
+			letter-spacing: 0.05em;
+		}
+
+		.form-input {
+			width: 100%;
+			padding: 0.8rem 1rem;
+			border: 1px solid rgba(255, 255, 255, 0.3);
+			border-radius: 8px;
+			background: rgba(255, 255, 255, 0.05);
+			color: #ffffff;
+			font-size: 0.9rem;
+			transition: all 0.3s ease;
+			box-sizing: border-box;
+		}
+
+		.form-input:focus {
+			outline: none;
+			border-color: #9f6cf7;
+			background: rgba(255, 255, 255, 0.1);
+			box-shadow: 0 0 0 3px rgba(159, 108, 247, 0.1);
+		}
+
+		.form-input::placeholder {
+			color: rgba(255, 255, 255, 0.5);
+		}
+
+		.checkbox-forgot-row {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin: 1.5rem 0 2rem 0;
+			gap: 1rem;
+		}
+
+		.checkbox-group {
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+			padding-top: 1px; 
+		}
+
+		.checkbox-group input[type="checkbox"] {
+			width: 18px;
+			height: 18px;
+			accent-color: #9f6cf7;
+		}
+
+		.checkbox-group label {
+			margin: 0;
+			font-size: 0.9rem;
+			font-weight: 600;
+			color: #ffffff;
+			letter-spacing: 0.05em;
+		}
+
+		.forgot-password {
+			display: flex;
+			align-items: center;
+			margin: 0;
+			margin-top: -5px;
+		}
+
+		.forgot-password a {
+			color: #ffffff;
+			text-decoration: none;
+			font-size: 0.9rem; 
+			line-height: 1.2rem;  
+		}
+
+		.forgot-password a:hover {
+			color: rgba(255, 255, 255, 0.8);
+			text-decoration: underline;
+		}
+
+		.form-login-btn {
+			width: 100%;
+			background: linear-gradient(45deg, #9f6cf7, #6f8bf7);
+			color: #ffffff;
+			border: none;
+			padding: 1rem 2rem;
+			border-radius: 8px;
+			font-size: 1rem;
+			font-weight: 600;
+			letter-spacing: 0.1em;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			box-shadow: 0 4px 15px rgba(159, 108, 247, 0.3);
+			text-align: center;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.form-login-btn:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 8px 25px rgba(159, 108, 247, 0.4);
+			background: linear-gradient(45deg, #b784ff, #84a0ff);
+		}
+
+		.register-link {
+			text-align: center;
+			margin-top: 2rem;
+			padding-top: 1.5rem;
+			border-top: 1px solid rgba(255, 255, 255, 0.1);
+		}
+
+		.register-link p {
+			color: rgba(255, 255, 255, 0.7);
+			font-size: 0.9rem;
+			margin-bottom: 0.5rem;
+		}
+
+		.register-link a {
+			color: #9f6cf7;
+			text-decoration: none;
+			font-weight: 600;
+			transition: color 0.3s ease;
+		}
+
+		.register-link a:hover {
+			color: #b784ff;
+		}
+
+		/* Mobile responsive */
+		@media screen and (max-width: 768px) {
+			.login-container {
+				padding: 0 1rem 1rem;
+			}
+
+			.login-content {
+				padding: 2.5rem 2rem 1.5rem 2rem;
+				width: 100%;
+			}
+
+			.login-title {
+				font-size: 1.5rem;
+			}
+		}
+
+		@media screen and (max-width: 600px) {
+			.login-container {
+				min-height: calc(100vh - 4rem);
+				padding: 0 1rem 1rem;
+			}
+		}
+
+		@media screen and (max-width: 480px) {
+			.login-container {
+				padding: 0 0.5rem 0.5rem;
+			}
+
+			.login-content {
+				padding: 2rem 1.5rem 1rem 1.5rem;
+				border-radius: 8px;
+			}
+		}
+	</style>
+	<body class="is-preload">
+		<!-- Navigation will be loaded dynamically -->
+
+		<!-- Wrapper (same as intro page for background consistency) -->
+		<div id="wrapper">
+
+		<!-- Main Login Container -->
+		<div class="login-container">
+			<div class="login-content">
+				<h1 class="login-title" id="login-title">欢迎使用Timing</h1>
+				
+				<form id="loginForm" action="#" method="post">
+					<div class="form-group">
+						<label for="username" id="username-label">用户名/邮箱</label>
+						<input type="text" id="username" name="username" class="form-input" placeholder="请输入用户名或邮箱地址">
+					</div>
+					
+					<div class="form-group">
+						<label for="password" id="password-label">密码</label>
+						<input type="password" id="password" name="password" class="form-input" placeholder="请输入您的密码">
+					</div>
+					
+					<button type="submit" class="form-login-btn" id="login-submit">登录</button>
+				</form>
+				
+				<div class="register-link">
+					<p id="register-text">还没有账户？</p>
+					<a href="register.html" id="register-link">立即注册</a>
+				</div>
+			</div>
+		</div>
+
+		</div>
+
+		<!-- BG -->
+		<div id="bg"></div>
+
+				<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script type="module" src="assets/js/appwrite-auth.js"></script>
+		<script>
+			// Fallback to CDN if local file fails to load
+			if (typeof jQuery === 'undefined') {
+				document.write('<script src="https://code.jquery.com/jquery-3.6.0.min.js"><\/script>');
+				// Additional fallback to a Chinese CDN
+				document.write('<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"><\/script>');
+			}
+		</script>
+		<script src="assets/js/browser.min.js"></script>
+		<!-- Removed breakpoints.min.js - file not found -->
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+		<!-- Load navigation system -->
+		<script src="assets/js/navigation-loader.js"></script>
+		<script src="assets/js/navigation.js"></script>
+		<!-- Language switcher -->
+		<script src="assets/js/language-switcher.js"></script>
+		
+		<script type="module">
+			// Initialize Appwrite authentication
+			let appwriteAuth;
+			window.appwriteAuth = null;
+			
+			document.addEventListener('DOMContentLoaded', async function() {
+				// Initialize Appwrite auth
+				appwriteAuth = new AppwriteAuth();
+				window.appwriteAuth = appwriteAuth;
+				
+				// Check if user is already logged in
+				if (appwriteAuth.isLoggedIn()) {
+					const currentLanguage = window.LanguageSwitcher ? window.LanguageSwitcher.getCurrentLanguage() : 'zh';
+					window.location.href = `index.html?lang=${currentLanguage}`;
+					return;
+				}
+			});
+			
+			// Login form handling
+			document.getElementById('loginForm').addEventListener('submit', async function(e) {
+				e.preventDefault();
+				
+				const email = document.getElementById('username').value.trim();
+				const password = document.getElementById('password').value;
+				const loginButton = document.getElementById('login-submit');
+				const originalText = loginButton.textContent;
+				
+				// Validate inputs
+				if (!email || !password) {
+					const currentLanguage = window.LanguageSwitcher ? window.LanguageSwitcher.getCurrentLanguage() : 'zh';
+					const message = currentLanguage === 'zh' ? '请输入用户名/邮箱和密码' : 'Please enter username/email and password';
+					appwriteAuth.showMessage(message, 'error');
+					return;
+				}
+				
+				// Show loading state
+				loginButton.disabled = true;
+				const currentLanguage = window.LanguageSwitcher ? window.LanguageSwitcher.getCurrentLanguage() : 'zh';
+				loginButton.textContent = currentLanguage === 'zh' ? '登录中...' : 'Logging in...';
+				
+				try {
+					// Attempt login
+					const result = await appwriteAuth.login(email, password);
+					
+					if (result.success) {
+						appwriteAuth.showMessage(result.message, 'success');
+						
+						// Redirect to main page after successful login
+						setTimeout(() => {
+							const currentLanguage = window.LanguageSwitcher ? window.LanguageSwitcher.getCurrentLanguage() : 'zh';
+							window.location.href = `index.html?lang=${currentLanguage}`;
+						}, 1500);
+					} else {
+						appwriteAuth.showMessage(result.message, 'error');
+					}
+				} catch (error) {
+					console.error('Login error:', error);
+					appwriteAuth.showMessage('登录失败，请重试', 'error');
+				} finally {
+					// Reset button state
+					loginButton.disabled = false;
+					loginButton.textContent = originalText;
+				}
+			});
+			
+			// Forgot password handling
+			document.getElementById('forgotPassword').addEventListener('click', function(e) {
+				e.preventDefault();
+				const currentLanguage = window.LanguageSwitcher ? window.LanguageSwitcher.getCurrentLanguage() : 'zh';
+				const message = currentLanguage === 'zh' ? '忘记密码功能将在后端完成后启用' : 'Forgot password functionality will be enabled after backend completion';
+				alert(message);
+			});
+			
+			// Register link handling
+			document.getElementById('register-link').addEventListener('click', function(e) {
+				e.preventDefault();
+				// Get current language from language switcher or URL
+				const currentLanguage = window.LanguageSwitcher ? window.LanguageSwitcher.getCurrentLanguage() : 'zh';
+				// Navigate to register page with language parameter
+				window.location.href = `register.html?lang=${currentLanguage}`;
+			});
+		</script>
+	</body>
+</html> 

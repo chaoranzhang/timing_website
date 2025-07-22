@@ -1,0 +1,250 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>注册 - Timing</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="assets/css/navigation.css" />
+		<link rel="stylesheet" href="assets/css/register-style.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+
+	<body class="is-preload">
+		<!-- Top Navigation Bar (exactly same as intro page) -->
+
+		<!-- Wrapper (same as intro page for background consistency) -->
+		<div id="wrapper">
+
+		<!-- Main Register Container -->
+		<div class="register-container">
+			<div class="register-content">
+				<button class="back-btn" id="back-btn" onclick="goBack()">←</button>
+				<h2 class="verification-title" id="verification-title"></h2>
+				<!-- Removed page-indicator '1/2' -->
+				<h1 class="register-title" id="register-title">欢迎来到Timing</h1>
+				
+				<form id="registerForm" action="#" method="post">
+					<!-- Page 1: Basic Information -->
+					<div class="form-page active" id="page1">
+						<div class="form-group">
+							<label for="username" id="userName-label">用户名</label>
+							<input type="text" id="username" name="username" class="form-input" placeholder="请输入您的用户名">
+						</div>
+						
+						<div class="form-group">
+							<label for="email" id="email-label">邮箱</label>
+							<input type="email" id="email" name="email" class="form-input" placeholder="请输入您的邮箱地址">
+						</div>
+						
+						<div class="form-group">
+							<label for="password" id="password-label">密码</label>
+							<input type="password" id="password" name="password" class="form-input" placeholder="请输入密码（至少6个字符）">
+						</div>
+						
+						<div class="form-group">
+							<label for="confirmPassword" id="confirm-password-label">确认密码</label>
+							<input type="password" id="confirmPassword" name="confirmPassword" class="form-input" placeholder="请再次输入密码">
+
+							<div class="password-warning" id="password-warning">不一致</div>
+						</div>
+						
+						<!-- <button type="button" class="form-register-btn" id="next-btn" onclick="nextPage()">确认</button> -->
+						<button type="submit" class="form-register-btn" id="register-submit">注册</button>
+					</div>
+
+					<!-- Page 2: Verification information -->
+					<div class="form-page" id="page2">
+						<div class="form-group">
+							<label for="username-verification" id="username-verification-label">用户名</label>
+							<input type="text" id="username-verification" name="username-verification" class="form-input" placeholder="">
+							<script>
+								document.getElementById('username-verification').addEventListener('keydown', function(e){
+									if(e.key == 'Enter') {
+										e.preventDefault();
+										document.getElementById('verification-submit').click();
+									}
+								})
+							</script>
+						</div>
+						
+						<div class="form-group">
+							<label for="verification" id="verification-label">验证码</label>
+							<div class="verification-group">
+								<input type="text" id="verification" name="verification" class="form-input" placeholder="">
+								<span class="verification-resend" id="verification-resend">重新发送</span>
+								<script>
+									document.getElementById('verification').addEventListener('keydown', function(e){
+										if(e.key == 'Enter') {
+											e.preventDefault();
+											document.getElementById('verification-submit').click();
+										}
+									})
+								</script>
+							</div>
+						</div>
+						<button type="submit" class="form-register-btn" id="verification-submit">验证邮箱</button>
+					</div>
+
+				</form>
+				
+				<div class="login-link">
+					<p id="login-text">已有账户？</p>
+					<a href="login.html" id="login-link">立即登录</a>
+				</div>
+			</div>
+		</div>
+
+		</div>
+
+		<!-- BG -->
+		<div id="bg"></div>
+
+				<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script type="module" src="assets/js/appwrite-auth.js"></script>
+		<script>
+			// Fallback to CDN if local file fails to load
+			if (typeof jQuery === 'undefined') {
+				document.write('<script src="https://code.jquery.com/jquery-3.6.0.min.js"><\/script>');
+				// Additional fallback to a Chinese CDN
+				document.write('<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"><\/script>');
+			}
+		</script>
+		<script src="assets/js/browser.min.js"></script>
+		<!-- Removed breakpoints.min.js - file not found -->
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+		<!-- Navigation handling -->
+		<script src="assets/js/navigation-loader.js"></script>
+		<script src="assets/js/navigation.js"></script>
+		<!-- Language switcher -->
+		<script src="assets/js/language-switcher.js"></script>
+		
+		<script type="module">
+			// Initialize Appwrite authentication
+			let appwriteAuth;
+			window.appwriteAuth = null;
+			
+			// Password validation function
+			function validatePassword() {
+				const password = document.getElementById('password').value;
+				const confirmPassword = document.getElementById('confirmPassword').value;
+				const warning = document.getElementById('password-warning');
+				
+				if (confirmPassword && password !== confirmPassword) {
+					warning.classList.add('show');
+					return false;
+				} else {
+					warning.classList.remove('show');
+					return true;
+				}
+			}
+			
+			// Page navigation variables
+			let currentPage = 1;
+			
+			function goBack() {
+				// Switch to page 1
+				document.getElementById('page2').classList.remove('active');
+				document.getElementById('page1').classList.add('active');
+				document.getElementById('page-indicator').textContent = '1/2';
+				document.getElementById('back-btn').style.display = 'none';
+				document.getElementById('verification-title').style.display = 'flex';
+				currentPage = 1;
+			}
+			
+			document.addEventListener('DOMContentLoaded', async function() {
+				// Initialize Appwrite auth
+				appwriteAuth = new AppwriteAuth();
+				window.appwriteAuth = appwriteAuth;
+				
+				// Check if user is already logged in
+				if (appwriteAuth.isLoggedIn()) {
+					const currentLanguage = window.LanguageSwitcher ? window.LanguageSwitcher.getCurrentLanguage() : 'zh';
+					window.location.href = `index.html?lang=${currentLanguage}`;
+					return;
+				}
+				
+				// Add password validation listeners
+				document.getElementById('password').addEventListener('input', validatePassword);
+				document.getElementById('confirmPassword').addEventListener('input', validatePassword);
+			});
+			
+			// Registration form handling
+			document.getElementById('registerForm').addEventListener('submit', async function(e) {
+				e.preventDefault();
+				
+				const username = document.getElementById('username').value.trim();
+				const email = document.getElementById('email').value.trim();
+				const password = document.getElementById('password').value;
+				const confirmPassword = document.getElementById('confirmPassword').value;
+				const agree = document.getElementById('agree').checked;
+				const registerButton = document.getElementById('register-submit');
+				const originalText = registerButton.textContent;
+				
+				// Validate inputs
+				if (!username || !email || !password || !confirmPassword) {
+					appwriteAuth.showMessage('请填写所有必填字段', 'error');
+					return;
+				}
+				
+				if (!validatePassword()) {
+					appwriteAuth.showMessage('密码不一致', 'error');
+					return;
+				}
+				
+				if (!agree) {
+					appwriteAuth.showMessage('请同意服务条款', 'error');
+					return;
+				}
+				
+				// Show loading state
+				registerButton.disabled = true;
+				const currentLanguage = window.LanguageSwitcher ? window.LanguageSwitcher.getCurrentLanguage() : 'zh';
+				registerButton.textContent = currentLanguage === 'zh' ? '注册中...' : 'Registering...';
+				
+				try {
+					// Attempt registration
+					const result = await appwriteAuth.register(email, password, username);
+					
+					if (result.success) {
+						appwriteAuth.showMessage(result.message, 'success');
+						
+						// Redirect to main page after successful registration
+						setTimeout(() => {
+							const currentLanguage = window.LanguageSwitcher ? window.LanguageSwitcher.getCurrentLanguage() : 'zh';
+							window.location.href = `index.html?lang=${currentLanguage}`;
+						}, 1500);
+					} else {
+						appwriteAuth.showMessage(result.message, 'error');
+					}
+				} catch (error) {
+					console.error('Registration error:', error);
+					appwriteAuth.showMessage('注册失败，请重试', 'error');
+				} finally {
+					// Reset button state
+					registerButton.disabled = false;
+					registerButton.textContent = originalText;
+				}
+			});
+			
+			// Terms link handling
+			document.getElementById('termsLink').addEventListener('click', function(e) {
+				e.preventDefault();
+				const currentLanguage = window.LanguageSwitcher ? window.LanguageSwitcher.getCurrentLanguage() : 'zh';
+				const message = currentLanguage === 'zh' ? '服务条款功能将在后端完成后启用' : 'Terms of service functionality will be enabled after backend completion';
+				alert(message);
+			});
+			
+			// Login link handling
+			document.getElementById('login-link').addEventListener('click', function(e) {
+				e.preventDefault();
+				// Get current language from language switcher
+				const currentLanguage = window.LanguageSwitcher ? window.LanguageSwitcher.getCurrentLanguage() : 'zh';
+				// Navigate to login page with current language
+				window.location.href = `login.html?lang=${currentLanguage}`;
+			});
+		</script>
+	</body>
+</html> 

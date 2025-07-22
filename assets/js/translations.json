@@ -1,0 +1,224 @@
+{
+  "en": {
+    "pageTitle": "Energy Flow - Timing",
+    "header": {
+      "title": "Your Life Hacking System",
+      "subtitle": "Harmonizing your decision-making with AI-Powered rhythm intelligence",
+      "subtitle2": "Flow with Time, not Against it"
+    },
+    "main": {
+      "title": "Energy Flow",
+      "subtitle": "Enter your information to generate your personalized energy flow"
+    },
+    "form": {
+      "name": {
+        "label": "Name",
+        "placeholder": "Please enter your name"
+      },
+      "birthtime": {
+        "label": "Birth Date & Time",
+        "placeholder": "MM/DD/YYYY XX:XX AM"
+      },
+      "gender": {
+        "label": "Gender",
+        "placeholder": "Please select gender",
+        "options": {
+          "default": "Please select gender",
+          "female": "Female",
+          "male": "Male"
+        }
+      },
+      "birthplace": {
+        "label": "Birth Location",
+        "placeholder": "Please enter birth city"
+      },
+      "submit": "Calculate",
+      "submitCalculating": "Calculating..."
+    },
+    "legend": {
+      "health": "Health",
+      "career": "Career",
+      "love": "Love"
+    },
+    "invitation": {
+      "button": "GET YOUR INVITATION CODE"
+    },
+    "contact": {
+      "title": "CONTACT",
+      "message": {
+        "label": "Message(Optional)",
+        "placeholder": "Let us know what you think"
+      },
+      "submit": "Submit"
+    },
+    "social": {
+      "twitter": "Twitter",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "github": "GitHub"
+    },
+    "payment": {
+      "title": "Unlock Energy Flow Analysis",
+      "subtitle": "Get 1 year access to energy flow analysis features",
+      "price": "$0.99",
+      "period": "/year",
+      "feature1": "Complete energy flow analysis",
+      "feature2": "Health, career, and love predictions",
+      "feature3": "Unlimited usage for 1 year",
+      "payButton": "Pay $0.99 Now",
+      "processing": "Processing...",
+      "success": "Payment successful! Redirecting...",
+      "failed": "Payment failed, please try again",
+      "required": "Payment of $0.99 required to use this feature",
+      "secure": "Secure payment powered by Stripe"
+    },
+    "login": {
+      "title": "Timing - Login",
+      "loginTitle": "Welcome to Timing",
+      "usernameLabel": "Username/Email",
+      "usernamePlaceholder": "Enter your username/email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "rememberLabel": "Keep me logged in",
+      "forgotPassword": "Forgot Password",
+      "loginSubmit": "Login",
+      "registerText": "Don't have an account?",
+      "registerLink": "Sign Up Now"
+    },
+    "register": {
+      "title": "Timing - Register",
+      "registerTitle": "Welcome to Timing",
+      "userNameLabel": "Username",
+      "userNamePlaceholder": "Please enter your username",
+      "userNameverificationLabel": "Username or Email",
+      "userNameverificationPlaceholder": "Please enter your username or email",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email address",
+      "verificationLabel": "Verification Code",
+      "verificationPlaceholder": "Enter verification code",
+      "verificationResend": "Resend",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "confirmPasswordLabel": "Confirm Password",
+      "confirmPasswordPlaceholder": "Enter your password again",
+      "passwordWarning": "Mismatch",
+      "agreeLabel": "Agree to Terms of Service",
+      "termsLink": "View Terms",
+      "registerSubmit": "Register",
+      "verificationSubmit": "Verify Email",
+      "loginText": "Already have an account?",
+      "loginLink": "Sign In Now"
+    }
+  },
+  "zh": {
+    "pageTitle": "能量流 - Timing",
+    "header": {
+      "title": "您的人生黑客系统",
+      "subtitle": "用AI驱动的节奏智能协调您的决策",
+      "subtitle2": "与时间同行，而非对抗"
+    },
+    "main": {
+      "title": "能量流",
+      "subtitle": "输入你的信息，生成专属能量流"
+    },
+    "form": {
+      "name": {
+        "label": "姓名",
+        "placeholder": "请输入您的姓名"
+      },
+      "birthtime": {
+        "label": "出生时间",
+        "placeholder": "MM/DD/YYYY XX:XX AM"
+      },
+      "gender": {
+        "label": "性别",
+        "placeholder": "请选择性别",
+        "options": {
+          "default": "请选择性别",
+          "female": "女",
+          "male": "男"
+        }
+      },
+      "birthplace": {
+        "label": "出生地点",
+        "placeholder": "请输入出生城市"
+      },
+      "submit": "推演",
+      "submitCalculating": "推演中"
+    },
+    "legend": {
+      "health": "健康",
+      "career": "事业",
+      "love": "爱情"
+    },
+    "invitation": {
+      "button": "获取邀请码"
+    },
+    "contact": {
+      "title": "联系我们",
+      "message": {
+        "label": "留言（选填）",
+        "placeholder": "有什么想对我们说的吗？"
+      },
+      "submit": "提交"
+    },
+    "social": {
+      "twitter": "推特",
+      "facebook": "脸书",
+      "instagram": "Instagram",
+      "github": "GitHub"
+    },
+    "payment": {
+      "title": "解锁能量流分析",
+      "subtitle": "获得一年的能量流分析功能访问权限",
+      "price": "$0.99",
+      "period": "/年",
+      "feature1": "完整的能量流分析",
+      "feature2": "健康、事业、爱情预测",
+      "feature3": "一年内无限次使用",
+      "payButton": "立即支付 $0.99",
+      "processing": "处理中...",
+      "success": "支付成功！正在跳转...",
+      "failed": "支付失败，请重试",
+      "required": "需要支付 $0.99 才能使用此功能",
+      "secure": "安全支付，由 Stripe 提供支持"
+    },
+    "login": {
+      "title": "Timing - 登录",
+      "loginTitle": "欢迎使用Timing",
+      "usernameLabel": "用户名/邮箱",
+      "usernamePlaceholder": "请输入用户名/邮箱",
+      "passwordLabel": "密码",
+      "passwordPlaceholder": "请输入密码",
+      "rememberLabel": "保持登录状态",
+      "forgotPassword": "忘记密码",
+      "loginSubmit": "登录",
+      "registerText": "还没有账户？",
+      "registerLink": "立即注册"
+    },
+    "register": {
+      "title": "Timing - 注册",
+      "registerTitle": "欢迎来到Timing",
+      "userNameLabel": "用户名",
+      "userNamePlaceholder": "请输入您的用户名",
+      "userNameverificationLabel": "用户名或邮箱",
+      "userNameverificationPlaceholder": "请输入您的用户名或邮箱",
+      "emailLabel": "邮箱",
+      "emailPlaceholder": "请输入邮箱地址",
+      "verificationLabel": "验证码",
+      "verificationPlaceholder": "请输入验证码",
+      "verificationResend": "重新发送",
+      "passwordLabel": "密码",
+      "passwordPlaceholder": "请输入密码",
+      "confirmPasswordLabel": "确认密码",
+      "confirmPasswordPlaceholder": "请再次输入密码",
+      "passwordWarning": "不一致",
+      "agreeLabel": "同意服务条款",
+      "termsLink": "查看条款",
+      "registerSubmit": "注册",
+      "verificationSubmit": "验证邮箱",
+      "loginText": "已有账户？",
+      "loginLink": "立即登录"
+    }
+  }
+} 

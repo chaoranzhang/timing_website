@@ -1,0 +1,918 @@
+<!DOCTYPE HTML>
+<!--
+	Dimension by HTML5 UP
+	https://html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (https://html5up.net/license)
+-->
+<html>
+<head>
+		<title>Energy Flow - Timing</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https:; connect-src 'self' http: https:; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' data: https: fonts.googleapis.com fonts.gstatic.com;">
+		<meta http-equiv="X-Content-Type-Options" content="nosniff">
+		<!-- Google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+		<!-- Load main site CSS -->
+		<link rel="stylesheet" href="assets/css/main.css">
+		<link rel="stylesheet" href="assets/css/navigation.css">
+		<link rel="stylesheet" href="assets/css/noscript.css" media="none">
+		<link rel="stylesheet" href="assets/css/payment.css">
+		<!-- Original curve styles -->
+    <link rel="stylesheet" href="curve/style.css">
+    <!-- Chart.js for energy curve -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<style>
+			/* Override body styles to match main pages */
+			body {
+				background: #1b1f22;
+				position: relative;
+				overflow-x: hidden;
+				padding-top: 5rem;
+			}
+
+			/* Background system matching main pages exactly */
+			#bg {
+				-moz-transform: scale(1.0);
+				-webkit-transform: scale(1.0);
+				-ms-transform: scale(1.0);
+				transform: scale(1.0);
+				-webkit-backface-visibility: hidden;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100vh;
+				z-index: 1;
+			}
+
+			#bg:before, #bg:after {
+				content: '';
+				display: block;
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+			}
+
+			#bg:before {
+				-moz-transition: background-color 2.5s ease-in-out;
+				-webkit-transition: background-color 2.5s ease-in-out;
+				-ms-transition: background-color 2.5s ease-in-out;
+				transition: background-color 2.5s ease-in-out;
+				-moz-transition-delay: 0.75s;
+				-webkit-transition-delay: 0.75s;
+				-ms-transition-delay: 0.75s;
+				transition-delay: 0.75s;
+				background-image: linear-gradient(to top, rgba(19, 21, 25, 0.5), rgba(19, 21, 25, 0.5));
+				background-size: auto;
+				background-position: center;
+				background-repeat: no-repeat;
+				z-index: 2;
+			}
+
+			#bg:after {
+				-moz-transform: scale(1.0825);
+				-webkit-transform: scale(1.0825);
+				-ms-transform: scale(1.0825);
+				transform: scale(1.0825);
+				-moz-transition: -moz-transform 0.325s ease-in-out, -moz-filter 0.325s ease-in-out;
+				-webkit-transition: -webkit-transform 0.325s ease-in-out, -webkit-filter 0.325s ease-in-out;
+				-ms-transition: -ms-transform 0.325s ease-in-out, -ms-filter 0.325s ease-in-out;
+				transition: transform 0.325s ease-in-out, filter 0.325s ease-in-out;
+				background-image: url("images/bg.jpg");
+				background-position: center;
+				background-size: cover;
+				background-repeat: no-repeat;
+				-moz-filter: blur(0.2rem);
+				-webkit-filter: blur(0.2rem);
+				-ms-filter: blur(0.2rem);
+				filter: blur(0.2rem);
+				z-index: 1;
+			}
+
+			/* Hide original styles that conflict */
+			.top-nav {
+				display: none;
+			}
+
+			.footer {
+				display: none;
+			}
+
+			/* Main container with modal styling */
+			.modal-container {
+				position: relative;
+				z-index: 3;
+				min-height: 100vh;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 0rem 2rem;
+			}
+
+			.modal-content {
+				-moz-transform: translateY(0);
+				-webkit-transform: translateY(0);
+				-ms-transform: translateY(0);
+				transform: translateY(0);
+				-moz-transition: opacity 0.325s ease-in-out, -moz-transform 0.325s ease-in-out;
+				-webkit-transition: opacity 0.325s ease-in-out, -webkit-transform 0.325s ease-in-out;
+				-ms-transition: opacity 0.325s ease-in-out, -ms-transform 0.325s ease-in-out;
+				transition: opacity 0.325s ease-in-out, transform 0.325s ease-in-out;
+				padding: 4.5rem 2.5rem 1.5rem 2.5rem;
+				position: relative;
+				width: 40rem;
+				max-width: 100%;
+				background-color: rgba(27, 31, 34, 0.85);
+				border-radius: 4px;
+				opacity: 1;
+			}
+
+
+
+			/* Title styling */
+			h2.major {
+				color: #ffffff;
+				border-bottom: solid 1px #ffffff;
+				width: -moz-max-content;
+				width: -webkit-max-content;
+				width: -ms-max-content;
+				width: max-content;
+				padding-bottom: 0.5rem;
+				margin: 0 0 2rem 0;
+				font-size: 1.5rem;
+				line-height: 1.4;
+				letter-spacing: 0.5rem;
+			}
+
+			/* Contact title alignment override */
+			.contact-title {
+				text-align: left !important;
+				align-self: flex-start !important;
+				margin-top: 5rem !important;
+			}
+
+			/* Contact form styling - using original CSS with left alignment */
+			.contact-form {
+				display: flex;
+				flex-direction: column;
+				gap: 1.5rem;
+			}
+
+			.contact-fields {
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			.contact-field {
+				display: flex;
+				flex-direction: column;
+				gap: 0.5rem;
+			}
+
+			.contact-field label {
+				font-weight: 500;
+				color: #ffffff;
+				font-size: 0.9rem;
+			}
+
+			.contact-field textarea {
+				padding: 0.75rem;
+				background-color: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(255, 255, 255, 0.3);
+				border-radius: 8px;
+				color: #ffffff;
+				font-size: 1rem;
+				transition: border-color 0.3s ease;
+				width: 100%;
+				resize: vertical;
+				min-height: 100px;
+				font-family: inherit;
+			}
+
+			.contact-field textarea:focus {
+				outline: none;
+				border-color: #9f6cf7;
+			}
+
+			.contact-actions {
+				display: flex;
+				justify-content: flex-start;
+			}
+
+			.contact-submit {
+				-moz-appearance: none;
+				-webkit-appearance: none;
+				-ms-appearance: none;
+				appearance: none;
+				-moz-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+				-webkit-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+				-ms-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+				transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+				background-color: transparent;
+				border-radius: 4px;
+				border: 0;
+				box-shadow: inset 0 0 0 1px #ffffff;
+				color: #ffffff !important;
+				cursor: pointer;
+				display: inline-block;
+				font-size: 0.8rem;
+				font-weight: 300;
+				height: 2.75rem;
+				letter-spacing: 0.2rem;
+				line-height: 2.75rem;
+				outline: 0;
+				padding: 0 1.25rem 0 1.35rem;
+				text-align: center;
+				text-decoration: none;
+				text-transform: uppercase;
+				white-space: nowrap;
+			}
+
+			.contact-submit:hover {
+				background-color: rgba(255, 255, 255, 0.075);
+			}
+
+			.contact-submit:active {
+				background-color: rgba(255, 255, 255, 0.175);
+			}
+
+			.contact-social {
+				margin-top: 2rem;
+				text-align: left;
+			}
+
+			.contact-icons {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+				display: flex;
+				justify-content: flex-start;
+				gap: 1rem;
+			}
+
+			.contact-icons li a {
+				color: rgba(255, 255, 255, 0.7);
+				text-decoration: none;
+				font-size: 1.2rem;
+				transition: color 0.3s ease;
+			}
+
+			.contact-icons li a:hover {
+				color: #9f6cf7;
+			}
+
+			.subtitle {
+				font-size: 0.9em;
+				margin-bottom: 2em;
+				color: rgba(255, 255, 255, 0.75);
+				letter-spacing: 0.1em;
+				line-height: 1.5;
+			}
+
+			/* Override original container styles */
+			.container {
+				background: none;
+				box-shadow: none;
+				padding: 0;
+				margin: 0;
+				max-width: none;
+				width: 100%;
+			}
+
+			/* Input section styling */
+			.input-section {
+				margin-bottom: 2em;
+			}
+
+			.input-group {
+				margin-bottom: 1.5em;
+			}
+
+			.input-group label {
+				display: block;
+				margin-bottom: 0.5em;
+				font-weight: 600;
+				color: #ffffff !important;
+				font-size: 0.9em;
+				letter-spacing: 0.1em;
+			}
+
+			.input-group input {
+				width: 100% !important;
+				padding: 0.8em 1em !important;
+				border: 1px solid rgba(255, 255, 255, 0.3) !important;
+				border-radius: 8px !important;
+				background: rgba(255, 255, 255, 0.05) !important;
+				color: #ffffff !important;
+				font-size: 0.9em !important;
+				transition: all 0.3s ease !important;
+				box-sizing: border-box;
+			}
+
+			.input-group input:focus {
+				outline: none !important;
+				border-color: #9f6cf7 !important;
+				background: rgba(255, 255, 255, 0.1) !important;
+			}
+
+			.input-group input::placeholder {
+				color: rgba(255, 255, 255, 0.5) !important;
+			}
+
+			/* Datetime input styling */
+			.datetime-input {
+				width: 100% !important;
+				padding: 0.8em 1em !important;
+				border: 1px solid rgba(255, 255, 255, 0.3) !important;
+				border-radius: 8px !important;
+				background: rgba(255, 255, 255, 0.05) !important;
+				color: #ffffff !important;
+				font-size: 0.9em !important;
+				transition: all 0.3s ease !important;
+				box-sizing: border-box;
+			}
+
+			.datetime-input:focus {
+				outline: none !important;
+				border-color: #9f6cf7 !important;
+				background: rgba(255, 255, 255, 0.1) !important;
+			}
+
+			/* 将日期时间输入框的图标变成白色 */
+			.datetime-input::-webkit-calendar-picker-indicator {
+				filter: invert(1);
+				cursor: pointer;
+			}
+
+			/* Gender select styling */
+			.gender-select {
+				width: 100% !important;
+				padding: 0.8em 1em !important;
+				border: 1px solid rgba(255, 255, 255, 0.3) !important;
+				border-radius: 8px !important;
+				background: rgba(255, 255, 255, 0.05) !important;
+				color: #ffffff !important;
+				font-size: 0.9em !important;
+				transition: all 0.3s ease !important;
+				box-sizing: border-box;
+				cursor: pointer;
+			}
+
+			.gender-select:focus {
+				outline: none !important;
+				border-color: #9f6cf7 !important;
+				background: rgba(255, 255, 255, 0.1) !important;
+			}
+
+			.gender-select option {
+				background: #ffffff !important;
+				color: #000000 !important;
+				padding: 0.5em !important;
+			}
+
+			/* Submit button styling */
+			.submit-btn {
+				background: linear-gradient(45deg, #9f6cf7, #6f8bf7) !important;
+				color: #ffffff !important;
+				border: none !important;
+				padding: 1em 2em !important;
+				border-radius: 12px !important;
+				font-size: 1em !important;
+				font-weight: 600 !important;
+				letter-spacing: 0.1em !important;
+				cursor: pointer !important;
+				transition: all 0.3s ease !important;
+				display: flex !important;
+				align-items: center !important;
+				gap: 0.5em !important;
+				margin: 2em auto 0 !important;
+				box-shadow: 0 4px 15px rgba(159, 108, 247, 0.3) !important;
+			}
+
+			.submit-btn:hover {
+				transform: translateY(-2px) !important;
+				box-shadow: 0 8px 25px rgba(159, 108, 247, 0.4) !important;
+				background: linear-gradient(45deg, #b784ff, #84a0ff) !important;
+			}
+
+			/* Energy section styling */
+			.energy-section {
+				margin-top: 3em !important;
+				padding: 2em !important;
+				background: rgba(255, 255, 255, 0.05) !important;
+				border-radius: 15px !important;
+				border: 1px solid rgba(255, 255, 255, 0.1) !important;
+			}
+
+			.legend {
+				display: flex !important;
+				justify-content: center !important;
+				gap: 2em !important;
+				margin-bottom: 2em !important;
+				flex-wrap: wrap !important;
+			}
+
+			.legend-item {
+				display: flex !important;
+				align-items: center !important;
+				gap: 0.5em !important;
+				font-size: 0.9em !important;
+				color: #ffffff !important;
+			}
+
+			.legend-color {
+				width: 16px !important;
+				height: 16px !important;
+				border-radius: 50% !important;
+			}
+
+			.legend-color.blue {
+				background: #5116b4 !important;
+			}
+
+			.legend-color.purple {
+				background: #2759ac !important;
+			}
+
+			.legend-color.pink {
+				background: #9444a3 !important;
+			}
+
+			#energyChart {
+				width: 100% !important;
+				max-height: 400px !important;
+				background: rgba(255, 255, 255, 0.02) !important;
+				border-radius: 8px !important;
+			}
+
+			/* Mobile responsive - matching main pages exactly */
+			@media screen and (max-width: 736px) {
+				.modal-container {
+					padding: 2rem 1rem;
+				}
+
+				.modal-content {
+					padding: 3.5rem 2rem 0.5rem 2rem;
+				}
+
+				.close:before {
+					top: 0.875rem;
+					left: 0.875rem;
+					width: 2.25rem;
+					height: 2.25rem;
+					background-size: 14px 14px;
+				}
+
+				.legend {
+					gap: 1em !important;
+				}
+				
+				.input-group input {
+					padding: 0.7em !important;
+					font-size: 0.85em !important;
+				}
+				
+				.datetime-input {
+					padding: 0.7em !important;
+					font-size: 0.85em !important;
+				}
+				
+				.gender-select {
+					padding: 0.7em !important;
+					font-size: 0.85em !important;
+				}
+				
+				.submit-btn {
+					padding: 0.8em 1.5em !important;
+					font-size: 0.9em !important;
+				}
+				
+				.energy-section {
+					padding: 1.5em !important;
+				}
+			}
+
+			@media screen and (max-width: 480px) {
+				.modal-content {
+					padding: 3rem 1.5rem 0.5rem 1.5rem;
+				}
+				
+				h2.major {
+					font-size: 1.2rem;
+				}
+			}
+
+			/* Legend styling to match chart colors */
+			.legend {
+				display: flex;
+				gap: 20px;
+				margin-bottom: 20px;
+				flex-wrap: wrap;
+			}
+
+			.legend-item {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+
+			.legend-color {
+				width: 16px;
+				height: 16px;
+				border-radius: 3px;
+			}
+
+			.legend-color.health { background-color: #5116b4; }
+			.legend-color.career { background-color: #2759ac; }
+			.legend-color.love { background-color: #9444a3; }
+
+			/* Header Styling */
+			#header {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				text-align: center;
+				color: #ffffff;
+				padding: 2rem 0 1rem 0;
+				position: relative;
+				z-index: 3;
+			}
+
+			#header .logo {
+				margin-top: 1rem;
+			}
+
+			#header .logo img {
+				width: 5.25rem;
+				height: 5.25rem;
+				border-radius: 50%;
+				border: none;
+			}
+
+			#header .content .inner h1 {
+				font-size: 1.5rem;
+				margin-bottom: 1rem;
+				color: #ffffff;
+				border: none;
+				text-decoration: none;
+				border-bottom: none;
+			}
+
+			#header .content {
+				border: none;
+			}
+
+			#header .content .inner {
+				border: none;
+			}
+
+			#header .content .inner p {
+				font-size: 0.7em;
+				color: rgba(255, 255, 255, 0.75);
+				border: none;
+				text-decoration: none;
+			}
+
+			/* Remove vertical line between logo and text */
+			#header .logo:after {
+				display: none;
+			}
+
+			#header .content:before {
+				display: none;
+			}
+
+			/* Move text closer to logo */
+			#header .content {
+				margin-top: 0.1rem;
+			}
+
+			/* Invitation button hover effect */
+			.invitation-btn:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 8px 25px rgba(159, 108, 247, 0.4);
+				background: linear-gradient(45deg, #b784ff, #84a0ff);
+			}
+
+			/* Background animation */
+			#bg:after {
+				-moz-animation: bg 20s linear infinite;
+				-webkit-animation: bg 20s linear infinite;
+				-ms-animation: bg 20s linear infinite;
+				animation: bg 20s linear infinite;
+			}
+
+			@-moz-keyframes bg {
+				0% { -moz-transform: scale(1.0825) translate(0, 0); }
+				33.33% { -moz-transform: scale(1.0825) translate(-30px, -30px); }
+				66.66% { -moz-transform: scale(1.0825) translate(-15px, -15px); }
+				100% { -moz-transform: scale(1.0825) translate(0, 0); }
+			}
+
+			@-webkit-keyframes bg {
+				0% { -webkit-transform: scale(1.0825) translate(0, 0); }
+				33.33% { -webkit-transform: scale(1.0825) translate(-30px, -30px); }
+				66.66% { -webkit-transform: scale(1.0825) translate(-15px, -15px); }
+				100% { -webkit-transform: scale(1.0825) translate(0, 0); }
+			}
+
+			@-ms-keyframes bg {
+				0% { -ms-transform: scale(1.0825) translate(0, 0); }
+				33.33% { -ms-transform: scale(1.0825) translate(-30px, -30px); }
+				66.66% { -ms-transform: scale(1.0825) translate(-15px, -15px); }
+				100% { -ms-transform: scale(1.0825) translate(0, 0); }
+			}
+
+			@keyframes bg {
+				0% { transform: scale(1.0825) translate(0, 0); }
+				33.33% { transform: scale(1.0825) translate(-30px, -30px); }
+				66.66% { transform: scale(1.0825) translate(-15px, -15px); }
+				100% { transform: scale(1.0825) translate(0, 0); }
+			}
+
+			/* Header animation - Original from main site */
+			#header {
+				-moz-animation: header 1.5s ease-out;
+				-webkit-animation: header 1.5s ease-out;
+				-ms-animation: header 1.5s ease-out;
+				animation: header 1.5s ease-out;
+			}
+
+			@-moz-keyframes header {
+				0% { -moz-transform: translateY(-2rem); opacity: 0; }
+				100% { -moz-transform: translateY(0); opacity: 1; }
+			}
+
+			@-webkit-keyframes header {
+				0% { -webkit-transform: translateY(-2rem); opacity: 0; }
+				100% { -webkit-transform: translateY(0); opacity: 1; }
+			}
+
+			@-ms-keyframes header {
+				0% { -ms-transform: translateY(-2rem); opacity: 0; }
+				100% { -ms-transform: translateY(0); opacity: 1; }
+			}
+
+			@keyframes header {
+				0% { transform: translateY(-2rem); opacity: 0; }
+				100% { transform: translateY(0); opacity: 1; }
+			}
+
+			/* Modal content animation */
+			.modal-content {
+				-moz-animation: modal 0.75s ease-out;
+				-webkit-animation: modal 0.75s ease-out;
+				-ms-animation: modal 0.75s ease-out;
+				animation: modal 0.75s ease-out;
+			}
+
+			@-moz-keyframes modal {
+				0% { -moz-transform: translateY(20px); opacity: 0; }
+				100% { -moz-transform: translateY(0); opacity: 1; }
+			}
+
+			@-webkit-keyframes modal {
+				0% { -webkit-transform: translateY(20px); opacity: 0; }
+				100% { -webkit-transform: translateY(0); opacity: 1; }
+			}
+
+			@-ms-keyframes modal {
+				0% { -ms-transform: translateY(20px); opacity: 0; }
+				100% { -ms-transform: translateY(0); opacity: 1; }
+			}
+
+			@keyframes modal {
+				0% { transform: translateY(20px); opacity: 0; }
+				100% { transform: translateY(0); opacity: 1; }
+			}
+	</style>
+</head>
+<body>
+		<!-- Background -->
+		<div id="bg"></div>
+		
+		<!-- Navigation will be loaded dynamically -->
+
+		<!-- Header -->
+		<header id="header">
+			<div class="logo">
+				<img src="images/LOGO.png" alt="Logo" />
+			</div>
+			<div class="content">
+				<div class="inner">
+					<h1>Your Life Hacking System</h1>
+					<p>Harmonizing your decision-making with AI-Powered rhythm intelligence<br />
+						Flow with Time, not Against it</p>
+				</div>
+			</div>
+		</header>
+
+		<div class="modal-container">
+			<div class="modal-content">
+				
+				<h2 class="major">Energy Flow</h2>
+				<p class="subtitle">Enter your information to generate your personalized energy flow</p>
+				
+
+				
+				<!-- Original container content -->
+    <div class="container">
+        <!-- User Input Section -->
+        <section class="input-section">
+            <div class="input-group">
+                <label>Name</label>
+							<input type="text" id="name" placeholder="Please enter your name">
+            </div>
+            <div class="input-group">
+                <label>Birth Date & Time</label>
+                <input type="datetime-local" id="birthtime" class="datetime-input" min="1900-01-01T00:00">
+            </div>
+						<div class="input-group">
+							<label>Gender</label>
+							<select id="gender" class="gender-select">
+								<option value="">Please select gender</option>
+								<option value="female">Female</option>
+								<option value="male">Male</option>
+							</select>
+            </div>
+            <div class="input-group">
+							<label>Birth Location</label>
+                <input type="text" id="birthplace" placeholder="Please enter birth city">
+            </div>
+            <button class="submit-btn">
+                <span class="btn-text">Calculate</span>
+                <span class="btn-icon">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+            </button>
+        </section>
+
+        <!-- Energy Curve Section -->
+        <section class="energy-section">
+            <div class="legend">
+                <div class="legend-item">
+                    <span class="legend-color blue"></span>
+                    <span>Health</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color purple"></span>
+                    <span>Career</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color pink"></span>
+                    <span>Love</span>
+                </div>
+            </div>
+            <canvas id="energyChart"></canvas>
+        </section>
+        
+        <!-- Invitation Code Button - Independent Section -->
+        <div style="text-align: center; margin-top: 2em;">
+            <a href="https://wj.qq.com/s2/22709197/66aa/" class="invitation-btn" style="
+                display: inline-block;
+                background: linear-gradient(45deg, #9f6cf7, #6f8bf7);
+                color: #ffffff;
+                padding: 1em 2em;
+                border-radius: 12px;
+                font-size: 1em;
+                font-weight: 600;
+                letter-spacing: 0.1em;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(159, 108, 247, 0.3);
+                text-transform: uppercase;
+            ">GET YOUR INVITATION CODE</a>
+        </div>
+    </div>
+    
+
+
+				<!-- Contact Section - At bottom of modal content -->
+				<h2 class="major contact-title">CONTACT</h2>
+				<form action="https://wj.qq.com/s2/22709197/66aa/" method="post" class="contact-form">
+					<div class="contact-fields">
+						<div class="contact-field">
+							<label for="contact-message">Message(Optional)</label>
+							<textarea name="message" id="contact-message" rows="4" placeholder="Let us know what you think"></textarea>
+						</div>
+					</div>
+					<ul class="actions">
+						<li><input type="submit" value="Submit" class="primary" /></li>
+					</ul>
+				</form>
+				<ul class="icons">
+					<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+					<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+					<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+					<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+				</ul>
+			</div>
+		</div>
+
+    <!-- Scripts -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script>
+			// Fallback for jQuery
+			if (typeof jQuery === 'undefined') {
+				document.write('<script src="https://code.jquery.com/jquery-3.6.0.min.js"><\/script>');
+			}
+		</script>
+		<!-- Load navigation system -->
+		<script src="assets/js/navigation-loader.js"></script>
+		<script src="assets/js/navigation.js"></script>
+		
+		<!-- Language switcher -->
+		<script src="assets/js/language-switcher.js"></script>
+		
+		<!-- Authentication system -->
+		<script type="module" src="assets/js/appwrite-auth.js"></script>
+		
+
+		
+		<!-- Original script.js functionality -->
+    <script src="curve/script.js"></script>
+    
+    <!-- Authentication check for index.html -->
+    <script type="module">
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Initialize Appwrite auth
+            let appwriteAuth;
+            try {
+                appwriteAuth = new AppwriteAuth();
+                window.appwriteAuth = appwriteAuth;
+            } catch (error) {
+                console.error('Failed to initialize Appwrite auth:', error);
+            }
+            // Enable calculate button for all users and add click handler
+            const submitBtn = document.querySelector('.submit-btn');
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = '1';
+            }
+            if (submitBtn) {
+                submitBtn.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    // Only check if user is logged in; comment out payment API check
+                    const userInfo = localStorage.getItem('userInfo');
+                    if (userInfo) {
+                        // Collect form data
+                        const name = document.getElementById('name')?.value?.trim() || '';
+                        const birthtimeValue = document.getElementById('birthtime')?.value || '';
+                        let birthdate = '', birthtime = '';
+                        if (birthtimeValue) {
+                            const dt = new Date(birthtimeValue);
+                            birthdate = dt.toISOString().split('T')[0];
+                            birthtime = dt.toTimeString().split(' ')[0].substring(0, 5);
+                        }
+                        const gender = document.getElementById('gender')?.value || '';
+                        const birthplace = document.getElementById('birthplace')?.value?.trim() || '';
+                        // Save to Appwrite
+                        if (window.appwriteAuth && window.appwriteAuth.saveCalculationData) {
+                            try {
+                                console.log('Saving to Appwrite:', { name, birthdate, birthtime, gender, birthplace });
+                                await window.appwriteAuth.saveCalculationData({ name, birthdate, birthtime, gender, birthplace });
+                                console.log('Appwrite saveCalculationData completed');
+                            } catch (err) {
+                                console.error('Failed to save calculation data to Appwrite:', err);
+                            }
+                        }
+                        if (window.birthdayAnalyzer) {
+                            window.birthdayAnalyzer.analyzeBirthday();
+                        }
+                        return;
+                    }
+                    // No user logged in - redirect to payment page
+                    const currentLanguage = window.LanguageSwitcher ? window.LanguageSwitcher.getCurrentLanguage() : 'zh';
+                    window.location.href = `payment.html?lang=${currentLanguage}`;
+                    /*
+                    // Check payment status via API (commented out for testing)
+                    try {
+                        const user = JSON.parse(userInfo);
+                        const response = await fetch(`http://localhost:8000/verify-payment/${user.email}`);
+                        const paymentStatus = await response.json();
+                        if (paymentStatus.paid) {
+                            if (window.birthdayAnalyzer) {
+                                window.birthdayAnalyzer.analyzeBirthday();
+                            }
+                        } else {
+                            window.location.href = `payment.html?lang=${currentLanguage}`;
+                        }
+                    } catch (error) {
+                        window.location.href = `payment.html?lang=${currentLanguage}`;
+                    }
+                    */
+                });
+            }
+        });
+    </script>
+</body>
+</html>

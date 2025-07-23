@@ -16,9 +16,11 @@ class PaymentPage {
     detectLanguage() {
         const urlParams = new URLSearchParams(window.location.search);
         const langParam = urlParams.get('lang');
+        console.log('URL lang parameter:', langParam);
         if (langParam === 'en') {
             this.currentLanguage = 'en';
         }
+        console.log('Current language set to:', this.currentLanguage);
     }
     
     setupEventHandlers() {
@@ -222,6 +224,7 @@ class PaymentPage {
     }
     
     updatePageText() {
+        console.log('updatePageText called with language:', this.currentLanguage);
         const translations = {
             zh: {
                 title: '限时特惠：解锁能量流分析',
@@ -234,7 +237,9 @@ class PaymentPage {
                 success: '支付成功！',
                 secure: '',
                 backLink: '← 返回首页',
-                pricePeriod: '/年'
+                pricePeriod: '/年',
+                originalPrice: '原价 $59.99',
+                onlyPrice: '仅需 $0.99/年'
             },
             en: {
                 title: 'Limited Time: Unlock Energy Flow Analysis',
@@ -247,7 +252,9 @@ class PaymentPage {
                 success: 'Payment Successful!',
                 secure: '',
                 backLink: '← Back to Homepage',
-                pricePeriod: '/year'
+                pricePeriod: '/year',
+                originalPrice: 'Original $59.99',
+                onlyPrice: 'Only $0.99/year'
             }
         };
         
@@ -262,7 +269,8 @@ class PaymentPage {
         const payButton = document.getElementById('payment-button-text');
         const secure = document.getElementById('payment-info');
         const backLink = document.getElementById('back-link');
-        const pricePeriod = document.getElementById('price-period');
+        const originalPrice = document.getElementById('original-price');
+        const onlyPrice = document.getElementById('only-price');
         
         if (title) title.textContent = t.title;
         if (subtitle) subtitle.textContent = t.subtitle;
@@ -272,7 +280,14 @@ class PaymentPage {
         if (payButton) payButton.textContent = t.payButton;
         if (secure) secure.textContent = t.secure;
         if (backLink) backLink.textContent = t.backLink;
-        if (pricePeriod) pricePeriod.textContent = t.pricePeriod;
+        if (originalPrice) {
+            originalPrice.textContent = t.originalPrice;
+            console.log('Updated originalPrice to:', t.originalPrice);
+        }
+        if (onlyPrice) {
+            onlyPrice.textContent = t.onlyPrice;
+            console.log('Updated onlyPrice to:', t.onlyPrice);
+        }
     }
 }
 

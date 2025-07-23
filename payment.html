@@ -140,14 +140,7 @@
         }
 
         .price-amount {
-            font-size: 3rem;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: baseline;
-            justify-content: center;
-            gap: 0.2rem;
+            text-align: center;
         }
 
         .price-currency {
@@ -155,10 +148,40 @@
             color: rgba(255, 255, 255, 0.7);
         }
 
-        .price-period {
-            font-size: 1.5rem;
-            color: rgba(255, 255, 255, 0.6);
+        .original-price {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-decoration: line-through;
             font-weight: 400;
+            margin-bottom: 0.5rem;
+            opacity: 0.6;
+        }
+
+        .current-price {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #9f6cf7, #6f8bf7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .only-price {
+            font-size: 2.5rem;
+            color: #ffffff;
+            font-weight: 700;
+            background: linear-gradient(45deg, #9f6cf7, #6f8bf7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .price-period {
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
         }
 
         .features-list {
@@ -267,7 +290,10 @@
             
             <div class="price-display">
                 <div class="price-amount">
-                    <span class="price-currency">$</span>0.99<span class="price-period" id="price-period">/年</span>
+                    <div class="original-price" id="original-price">原价 $59.99</div>
+                    <div class="current-price">
+                        <span class="only-price" id="only-price">仅需 $0.99/年</span>
+                    </div>
                 </div>
             </div>
             
